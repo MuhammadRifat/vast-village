@@ -6,11 +6,11 @@ import { faHome, faEnvelope, faBell, faUserFriends, faCaretDown } from '@fortawe
 
 const Header = () => {
     return (
-        <div className="fixed top-0 w-full">
+        <div className="fixed top-0 w-full z-10">
             <div className="grid grid-cols-1 bg-gray-300 py-3 md:grid-cols-2 px-10 lg:px-36">
                 <div className="flex justify-center align-items-center">
-                    <img src={logo} alt="" width="40" />
-                    <input type="text" name="" id="" className="px-3 mx-5 w-3/4 rounded-md" placeholder="Search" />
+                    <div className="w-10 bg-white rounded-full"><img src={logo} alt="" /></div>
+                    <input type="text" name="" id="" className="px-3 mx-5 w-3/4 rounded-md focus:outline-none" placeholder="Search" />
                 </div>
                 <div className="flex justify-center align-items-center mt-3 md:mt-0">
                     <button className="p-1 bg-gray-500 rounded-3xl w-10 text-white text-xl"><FontAwesomeIcon icon={faHome} /></button>

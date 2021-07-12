@@ -1,0 +1,8 @@
+.hide-scrollbar{
+    overflow-y: hidden;
+    transition: overflow-y 1s;
+}
+
+.hide-scrollbar:hover{
+    overflow-y: scroll;
+}
