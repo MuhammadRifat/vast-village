@@ -10,7 +10,7 @@ const Main = ({post}) => {
     const {id, name, postBody, date, photo, likes, comments, shares} = post;
 
     return (
-        <div className="p-2 bg-white mx-1 my-4 rounded-md shadow-sm">
+        <div className="p-2 bg-white mx-1 my-4 rounded-md shadow-md">
             <div className="flex justify-between">
                 <div className="flex">
                     <div className="w-12 mr-2">

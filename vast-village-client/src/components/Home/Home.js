@@ -4,6 +4,7 @@ import Chats from '../Chats/Chats';
 import Header from '../Header/Header';
 import Main from './Main/Main';
 import './Home.css';
+import CreatePost from '../CreatePost/CreatePost';
 
 const Home = () => {
 
@@ -272,7 +273,7 @@ const Home = () => {
             <Header />
             <div className="mt-28 md:mt-16 flex flex-col md:flex-row justify-center w-full h-full bg-gray-100 border-2">
                 <div className="hidden md:block md:w-1/4 h-full fixed left-8 hide-scrollbar">
-                    <h2 className="text-2xl font-bold fixed bg-gray-100 w-1/4 p-1 border-b-2">Friends</h2>
+                    <h2 className="text-2xl font-bold fixed bg-gray-100 w-1/4 p-1 border-b-2 text-gray-600">Friends</h2>
                     <div className="mt-10">
                         {
                             posts.map(friend => <Friends friend={friend} handleFriend={handleFriend} key={friend.id}></Friends>)
@@ -280,12 +281,13 @@ const Home = () => {
                     </div>
                 </div>
                 <div className="md:w-2/5 relative top-0">
+                    <CreatePost />
                     {
                         posts.map(post => <Main post={post} key={post.id}></Main>)
                     }
                 </div>
                 <div className="hidden md:block md:w-1/4 h-full fixed right-0 hide-scrollbar">
-                    <h2 className="text-2xl font-bold fixed bg-gray-100 w-1/4 p-1 border-b-2">Chats</h2>
+                    <h2 className="text-2xl font-bold fixed bg-gray-100 w-1/4 p-1 border-b-2 text-gray-600">Messaging</h2>
                     <div className="mt-10">
                         {
                             posts.map(friend => <Chats friend={friend} handleFriend={handleFriend} key={friend.id}></Chats>)
