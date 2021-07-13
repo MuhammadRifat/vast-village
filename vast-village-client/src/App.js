@@ -7,6 +7,8 @@ import {
 import Home from "./components/Home/Home";
 import Login from "./components/Login/Login";
 import NotFound from "./components/NotFound/NotFound";
+import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
+import Profile from "./components/Profile/Profile";
 
 export const userContext = createContext();
 
@@ -16,15 +18,27 @@ function App() {
     <userContext.Provider value={[loggedInUser, setLoggedInUser]}>
       <Router>
         <Switch>
-          <Route path="/home">
-            <Home />
-          </Route>
           <Route path="/login">
             <Login />
           </Route>
-          <Route exact path="/">
+          <PrivateRoute exact path="/">
             <Home />
-          </Route>
+          </PrivateRoute>
+          <PrivateRoute path="/home">
+            <Home />
+          </PrivateRoute>
+          <PrivateRoute path="/profile">
+            <Profile />
+          </PrivateRoute>
+          <PrivateRoute path="/chats">
+            <Home />
+          </PrivateRoute>
+          <PrivateRoute path="/friends">
+            <Home />
+          </PrivateRoute>
+          <PrivateRoute path="/notifications">
+            <Home />
+          </PrivateRoute>
           <Route path="*">
             <NotFound />
           </Route>

@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import image from '../../images/avater.png';
 import Modal from 'react-modal';
+import { userContext } from '../../App';
+import Loader from '../Loader/Loader';
 
 const customStyles = {
     content: {
@@ -16,7 +18,11 @@ const customStyles = {
 
 const CreatePost = () => {
     let subtitle;
+    const [loggedInUser] = useContext(userContext);
     const [modalIsOpen, setIsOpen] = useState(false);
+    const [post, setPost] = useState('');
+    const [isSuccess, setIsSuccess] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     function openModal() {
         setIsOpen(true);
@@ -31,41 +37,87 @@ const CreatePost = () => {
         setIsOpen(false);
     }
 
-    const name= "Rifat Mia";
-    return (
-        <div className="bg-white mx-1 mt-3 rounded-md shadow-md">
-            <h3 className="text-lg font-bold text-gray-600 w-full border-b-2 rounded-t-md py-1 px-2">Create Post</h3>
-            <div className="p-3 flex items-center">
-                <div className="w-10 rounded-full mr-2">
-                    <img src={image} alt="" />
-                </div>
-                <input onClick={openModal} type="text" className="bg-gray-200 p-3 w-full rounded-2xl focus:outline-none cursor-pointer font-bold text-transparent" name="createPost" id="createPost" placeholder="Write a post" />
-            </div>
-            <Modal
-                isOpen={modalIsOpen}
-                onAfterOpen={afterOpenModal}
-                onRequestClose={closeModal}
-                style={customStyles}
-                contentLabel="Example Modal"
-            >
-                <div className="flex justify-between items-center border-b-2 pb-1">
-                    <h2 className="font-bold text-xl text-gray-600" ref={(_subtitle) => (subtitle = _subtitle)}>Create a post</h2>
-                    <button onClick={closeModal} className="text-red-500">Cancel</button>
-                </div>
+    const handleBlur = (e) => {
+        setPost(e.target.value);
+    }
 
-                <div className="my-3 flex items-center">
+    const handleNewPost = () => {
+        setIsLoading(true);
+
+        const newPost = {
+            postBody: post.replace("'", ""),
+            author: loggedInUser.name,
+            authorEmail: loggedInUser.email,
+            authorPhoto: loggedInUser.photo,
+            date: new Date(),
+            likes: 0,
+            comments: 0,
+            shares: 0
+        };
+        console.log(newPost);
+
+        fetch('http://localhost:5000/addPost', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newPost)
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data) {
+                    setIsLoading(false);
+                    setIsSuccess(true);
+                }
+            })
+
+        setIsOpen(false);
+    }
+
+    return (
+        <div>
+            {isLoading &&
+                <Loader />
+            }
+
+            {isSuccess &&
+                <span className="flex justify-center text-green-700">Successfully Uploaded</span>
+            }
+
+            <div className="bg-white mx-1 mt-3 rounded-md shadow-md">
+                <h3 className="text-lg font-bold text-gray-600 w-full border-b-2 rounded-t-md py-1 px-2">Create Post</h3>
+                <div className="p-3 flex items-center">
                     <div className="w-10 rounded-full mr-2">
-                        <img src={image} alt="" />
+                        <img className="rounded-full" src={loggedInUser.photo || image} alt="" />
                     </div>
-                    <h3 className="font-bold text-gray-600">{name}</h3>
+                    <input onClick={openModal} type="text" className="bg-gray-200 p-3 w-full rounded-2xl focus:outline-none cursor-pointer font-bold text-transparent" name="createPost" id="createPost" placeholder="Write a post" />
                 </div>
-                <div>
-                    <textarea autoFocus className="focus:outline-none" cols="60" rows="5" placeholder="Write text here.."></textarea>
-                </div>
-                <div className="flex justify-end mt-3">
-                    <button className="font-bold rounded-xl bg-gray-500 text-white px-3 py-1">Post</button>
-                </div>
-            </Modal>
+                <Modal
+                    isOpen={modalIsOpen}
+                    onAfterOpen={afterOpenModal}
+                    onRequestClose={closeModal}
+                    style={customStyles}
+                    contentLabel="Example Modal"
+                >
+                    <div className="flex justify-between items-center border-b-2 pb-1">
+                        <h2 className="font-bold text-xl text-gray-600" ref={(_subtitle) => (subtitle = _subtitle)}>Create a post</h2>
+                        <button onClick={closeModal} className="text-red-500">Cancel</button>
+                    </div>
+
+                    <div className="my-3 flex items-center">
+                        <div className="w-10 rounded-full mr-2">
+                            <img className="rounded-full" src={loggedInUser.photo || image} alt="" />
+                        </div>
+                        <h3 className="font-bold text-gray-600">{loggedInUser.name}</h3>
+                    </div>
+                    <div>
+                        <textarea autoFocus onBlur={handleBlur} className="focus:outline-none" cols="60" rows="5" placeholder="Write text here.."></textarea>
+                    </div>
+                    <div className="flex justify-end mt-3">
+                        <button onClick={handleNewPost} className="font-bold rounded-xl bg-gray-500 text-white px-3 py-1">Post</button>
+                    </div>
+                </Modal>
+            </div>
         </div>
     );
 };

@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import './Login.css';
 import { userContext } from '../../App';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -25,6 +25,8 @@ const Login = () => {
         error: ''
     });
     const history = useHistory();
+    const location = useLocation();
+    const { from } = location.state || { from: { pathname: "/" } };
 
     // For using sign in with google
     const googleSignIn = () => {
@@ -120,26 +122,25 @@ const Login = () => {
 
     // For using to reduce repetition code
     const handleLogInUser = (res, isReplace) => {
-        fetch('https://enigmatic-coast-10449.herokuapp.com/isAdmin', {
+        const newUser = {
+            name: res.displayName,
+            email: res.email,
+            photo: res.photoURL,
+            error: ''
+        }
+        fetch('http://localhost:5000/addUser', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ email: res.email })
+            body: JSON.stringify({...newUser, date: new Date()})
         })
-            .then(res => res.json())
-            .then(data => {
-                const newUser = {
-                    email: res.email,
-                    name: res.displayName,
-                    error: '',
-                    photo: res.photoURL,
-                    isAdmin: data
-                }
-                setLoggedInUser(newUser);
-                setIsLoading(false);
-                isReplace && history.replace('/dashboard');
-            })
+        .then(res => res.json())
+        .then(data => {
+            // console.log(data);
+        })
+        setLoggedInUser(newUser);
+        isReplace && history.replace(from);
     }
 
     // Conditionally showing log in and create new account button
