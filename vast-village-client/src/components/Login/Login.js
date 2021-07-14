@@ -123,9 +123,9 @@ const Login = () => {
     // For using to reduce repetition code
     const handleLogInUser = (res, isReplace) => {
         const newUser = {
-            name: res.displayName,
+            name: res.displayName || user.name,
             email: res.email,
-            photo: res.photoURL,
+            photo: res.photoURL || "https://i.ibb.co/CzkSST0/avater.png",
             error: ''
         }
         fetch('http://localhost:5000/addUser', {
@@ -139,9 +139,19 @@ const Login = () => {
         .then(data => {
             // console.log(data);
         })
-        setLoggedInUser(newUser);
+
+        setCookie("email", res.email, 7);
+        setLoggedInUser({...newUser, darkMode: loggedInUser.darkMode});
         isReplace && history.replace(from);
     }
+
+    //set Cookie
+    function setCookie(cname, cvalue, exdays) {
+        const d = new Date();
+        d.setTime(d.getTime() + (exdays*24*60*60*1000));
+        let expires = "expires=" + d.toGMTString();
+        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+      }
 
     // Conditionally showing log in and create new account button
     const handleLogInOrCreate = () => {

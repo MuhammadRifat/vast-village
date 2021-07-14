@@ -22,6 +22,15 @@ app.get('/users', (req, res) => {
     client.end;
 })
 
+app.post('/user', (req, res) => {
+    client.query(`Select * from users where email='${req.body.email}'`, (err, result)=>{
+        if(!err){
+            res.send(result.rows[0]);
+        }
+    });
+    client.end;
+})
+
 // insert user data
 app.post('/addUser', (req, res) => {
     const user = req.body;

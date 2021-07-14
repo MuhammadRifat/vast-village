@@ -19,6 +19,7 @@ const customStyles = {
 const CreatePost = () => {
     let subtitle;
     const [loggedInUser] = useContext(userContext);
+    const {darkMode} = loggedInUser;
     const [modalIsOpen, setIsOpen] = useState(false);
     const [post, setPost] = useState('');
     const [isSuccess, setIsSuccess] = useState(false);
@@ -45,7 +46,7 @@ const CreatePost = () => {
         setIsLoading(true);
 
         const newPost = {
-            postBody: post.replace("'", ""),
+            postBody: post.replace("'", "''"),
             author: loggedInUser.name,
             authorEmail: loggedInUser.email,
             authorPhoto: loggedInUser.photo,
@@ -54,7 +55,6 @@ const CreatePost = () => {
             comments: 0,
             shares: 0
         };
-        console.log(newPost);
 
         fetch('http://localhost:5000/addPost', {
             method: 'POST',
@@ -81,16 +81,16 @@ const CreatePost = () => {
             }
 
             {isSuccess &&
-                <span className="flex justify-center text-green-700">Successfully Uploaded</span>
+                <span className="flex justify-center text-green-700 font-sm">Successfully Uploaded</span>
             }
 
-            <div className="bg-white mx-1 mt-3 rounded-md shadow-md">
-                <h3 className="text-lg font-bold text-gray-600 w-full border-b-2 rounded-t-md py-1 px-2">Create Post</h3>
+            <div className={`mx-1 mt-3 rounded-md shadow-md ${darkMode ? "bg-gray-800" : "bg-white"}`}>
+                <h3 className={`text-lg font-bold w-full border-b-2 rounded-t-md py-1 px-2 ${darkMode ? "text-gray-200 border-gray-600" : "text-gray-600"}`}>Create Post</h3>
                 <div className="p-3 flex items-center">
                     <div className="w-10 rounded-full mr-2">
                         <img className="rounded-full" src={loggedInUser.photo || image} alt="" />
                     </div>
-                    <input onClick={openModal} type="text" className="bg-gray-200 p-3 w-full rounded-2xl focus:outline-none cursor-pointer font-bold text-transparent" name="createPost" id="createPost" placeholder="Write a post" />
+                    <input onClick={openModal} type="text" className={`p-3 w-full rounded-2xl focus:outline-none cursor-pointer font-bold text-transparent ${darkMode ? "bg-gray-700" : "bg-gray-200"}`} name="createPost" id="createPost" placeholder="Write a post" />
                 </div>
                 <Modal
                     isOpen={modalIsOpen}

@@ -3,7 +3,9 @@ import './Loader.css';
 
 const Loader = () => {
     return (
-        <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+        <div className="flex justify-center">
+            <div className="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+        </div>
     );
 };
 
