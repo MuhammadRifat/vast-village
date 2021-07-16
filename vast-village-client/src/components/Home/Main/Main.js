@@ -3,22 +3,23 @@ import image from '../../../images/avater.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEllipsisH, faThumbsUp, faCommentAlt, faShare } from '@fortawesome/free-solid-svg-icons'
 import { userContext } from '../../../App';
+import { Link } from 'react-router-dom';
 
-const Main = ({post}) => {
+const Main = ({ post }) => {
     const [loggedInUser] = useContext(userContext);
-    const {darkMode} = loggedInUser;
+    const { darkMode } = loggedInUser;
     const [postLength, setPostLength] = useState(140);
-    const { post_id, author, authorPhoto, postBody, date, likes, comments, shares} = post;
+    const { post_id, author, authorPhoto, authorEmail, postBody, date, likes, comments, shares } = post;
 
     return (
         <div className={`p-2 mx-1 my-4 rounded-md shadow-md ${darkMode ? "bg-gray-800 text-white" : "bg-white"}`}>
             <div className="flex justify-between">
                 <div className="flex">
                     <div className="w-12 mr-2">
-                        <img className="rounded-full" src={authorPhoto || image} alt="" />
+                        <Link to={`/profile/${authorEmail}`}><img className="rounded-full" src={authorPhoto || image} alt="" /></Link>
                     </div>
                     <div>
-                        <h3 className="font-bold">{author}</h3>
+                        <Link to={`/profile/${authorEmail}`}><h3 className="font-bold">{author}</h3></Link>
                         <small>{new Date(date).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</small>
                     </div>
                 </div>

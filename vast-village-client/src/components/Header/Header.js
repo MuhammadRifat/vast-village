@@ -34,7 +34,7 @@ const Header = () => {
                 <div className="flex justify-center align-items-center mt-3 md:mt-0">
                     <button onClick={() => history.push('/')} className="p-1 bg-gray-500 rounded-3xl w-10 h-10 text-white text-xl"><FontAwesomeIcon icon={faHome} /></button>
                     <button onClick={() => history.push('/chats')} className="ml-6 p-1 bg-gray-500 rounded-3xl w-10 h-10 text-white text-xl"><FontAwesomeIcon icon={faEnvelope} /></button>
-                    <button onClick={() => history.push('/friends')} className="ml-6 p-1 bg-gray-500 rounded-3xl w-10 h-10 text-white text-xl"><FontAwesomeIcon icon={faUserFriends} /></button>
+                    <button onClick={() => history.push('/peoples')} className="ml-6 p-1 bg-gray-500 rounded-3xl w-10 h-10 text-white text-xl"><FontAwesomeIcon icon={faUserFriends} /></button>
                     <button onClick={() => history.push('/notifications')} className="ml-6 p-1 bg-gray-500 rounded-3xl w-10 h-10 text-white text-xl"><FontAwesomeIcon icon={faBell} /></button>
                     <div className="relative">
                         <button onClick={() => setDropdown(!dropdown)} className="ml-6 p-1 bg-gray-500 rounded-3xl w-10 h-10 text-white text-xl"><FontAwesomeIcon icon={faCaretDown} /></button>
@@ -45,7 +45,7 @@ const Header = () => {
                             <button onClick={handleLogout} className="p-1 hover:bg-gray-200 rounded-b-md">Log out</button>
                         </div>}
                     </div>
-                    <button onClick={() => history.push('/profile')} className="ml-6 bg-gray-200 rounded-full w-10"><img className="rounded-full" src={loggedInUser.photo || profile} alt="" /></button>
+                    <button onClick={() => history.push(`/profile/${loggedInUser.email}`)} className="ml-6 bg-gray-200 rounded-full w-10"><img className="rounded-full" src={loggedInUser.photo || profile} alt="" /></button>
                 </div>
             </div>
         </div>

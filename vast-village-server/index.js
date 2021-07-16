@@ -13,19 +13,53 @@ app.listen(5000, ()=>{
 
 client.connect();
 
-app.get('/users', (req, res) => {
-    client.query(`Select * from users`, (err, result)=>{
+app.post('/users', (req, res) => {
+
+    const findQuery = `select * from users where email not in 
+    (((select distinct("friendOneEmail") from friends where "friendTwoEmail"='${req.body.email}') 
+    UNION 
+    (select distinct("friendTwoEmail") from friends where "friendOneEmail"='${req.body.email}'))
+    UNION 
+    ((select distinct("fromEmail") from "friendRequests" where "toEmail"='${req.body.email}') 
+    UNION 
+    (select distinct("toEmail") from "friendRequests" where "fromEmail"='${req.body.email}'))) AND email!='${req.body.email}'`;
+    
+    client.query(findQuery, (err, result)=>{
         if(!err){
             res.send(result.rows);
+        } else {
+            console.log(err);
         }
     });
-    client.end;
+    client.end; 
+})
+
+app.post('/friends', (req, res) => {
+    const findQuery = `select * from users where email IN ((select distinct("friendOneEmail") from friends where "friendTwoEmail"='${req.body.email}') UNION (select distinct("friendTwoEmail") from friends where "friendOneEmail"='${req.body.email}'));`;
+    client.query(findQuery, (err, result)=>{
+        if(!err){
+            res.send(result.rows);
+        } else {
+            console.log(err);
+        }
+    });
+    client.end; 
 })
 
 app.post('/user', (req, res) => {
     client.query(`Select * from users where email='${req.body.email}'`, (err, result)=>{
         if(!err){
             res.send(result.rows[0]);
+        }
+    });
+    client.end;
+})
+
+app.post('/getUserPosts', (req, res) => {
+    const findQuery = `SELECT * FROM posts where "authorEmail"='${req.body.email}' order by date desc`;
+    client.query(findQuery, (err, result)=>{
+        if(!err){
+            res.send(result.rows);
         }
     });
     client.end;
@@ -67,10 +101,79 @@ app.post('/addPost', (req, res)=> {
 })
 
 // load all posts
-app.get('/posts', (req, res) => {
-    client.query(`select * from posts`, (err, result) => {
+app.post('/posts', (req, res) => {
+    const findQuery = `select * from posts where "authorEmail" IN ((select distinct("friendOneEmail") from friends where "friendTwoEmail"='${req.body.email}') UNION (select distinct("friendTwoEmail") from friends where "friendOneEmail"='${req.body.email}')) order by date desc;`;
+    client.query(findQuery, (err, result) => {
         if(!err) {
             res.send(result.rows);
+        } else {
+            console.log(err);
+        }
+    })
+})
+
+app.post('/addFriend', (req, res) => {
+    const insertQuery = `insert into "friendRequests" ("fromEmail", "toEmail", date) 
+                        values ('${req.body.fromEmail}', '${req.body.toEmail}', '${req.body.date}')`;
+    client.query(insertQuery, (err, result) => {
+        if(!err) {
+            res.send(result.rowCount > 0);
+        } else {
+            console.log(err);
+        }
+    })
+})
+
+app.post('/confirmFriend', (req, res) => {
+    const insertQuery = `insert into friends("friendOneEmail", "friendTwoEmail", date) 
+                        values ('${req.body.toEmail}', '${req.body.fromEmail}', '${req.body.date}')`;
+    
+    const deleteQuery = `delete from "friendRequests" where "fromEmail"='${req.body.fromEmail}' AND "toEmail"='${req.body.toEmail}'`;
+    client.query(insertQuery, (err, result) => {
+        if(!err) {
+            if(result.rowCount > 0){
+                client.query(deleteQuery, (err, result) => {
+                    res.send(result.rowCount > 0);
+                })
+            }  else {
+                  console.log(err);  
+            }
+        } else {
+            console.log(err);
+        }
+    })
+})
+
+app.delete('/deleteRequest', (req, res) => {
+    const deleteQuery = `delete from "friendRequests" where "fromEmail"='${req.body.fromEmail}' AND "toEmail"='${req.body.toEmail}'`;
+    client.query(deleteQuery, (err, result) => {
+        if(!err) {
+            res.send(result.rowCount > 0);
+        } else {
+            console.log(err);
+        }
+    })
+})
+
+app.post('/friendRequests', (req, res) => {
+    const findQuery = `select * from users where email IN (select "fromEmail" from "friendRequests" where "toEmail"='${req.body.email}') order by date desc`;
+    client.query(findQuery, (err, result) => {
+        if(!err) {
+            res.send(result.rows);
+        } else {
+            console.log(err);
+        }
+    })
+
+})
+
+app.delete('/deleteFriend', (req, res) => {
+    const deleteQuery = `delete from friends where "friendOneEmail"='${req.body.emailOne}' AND "friendTwoEmail"='${req.body.emailTwo}' OR "friendOneEmail"='${req.body.emailTwo}' AND "friendTwoEmail"='${req.body.emailOne}'`;
+    client.query(deleteQuery, (err, result) => {
+        if(!err) {
+            res.send(result.rowCount > 0);
+        } else {
+            console.log(err);
         }
     })
 })

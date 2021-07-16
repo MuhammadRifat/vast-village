@@ -4,10 +4,11 @@ import {
   Switch,
   Route
 } from "react-router-dom";
-import Friends from "./components/Friends/Friends";
+
 import Home from "./components/Home/Home";
 import Login from "./components/Login/Login";
 import NotFound from "./components/NotFound/NotFound";
+import Peoples from "./components/Peoples/Peoples";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 import Profile from "./components/Profile/Profile";
 
@@ -43,6 +44,12 @@ function App() {
     return savedMode || false;
   }
 
+  if(loggedInUser.darkMode){
+    document.body.style = 'background: #111827';
+  } else {
+    document.body.style = 'background: #F3F4F6';
+  }
+
   return (
     <userContext.Provider value={[loggedInUser, setLoggedInUser]}>
       <Router>
@@ -56,14 +63,14 @@ function App() {
           <PrivateRoute path="/home">
             <Home />
           </PrivateRoute>
-          <PrivateRoute path="/profile">
+          <PrivateRoute path="/profile/:email">
             <Profile />
           </PrivateRoute>
           <PrivateRoute path="/chats">
             <Home />
           </PrivateRoute>
-          <PrivateRoute path="/friends">
-            <Friends />
+          <PrivateRoute path="/peoples">
+            <Peoples />
           </PrivateRoute>
           <PrivateRoute path="/notifications">
             <Home />

@@ -166,11 +166,11 @@ const Login = () => {
     return (
         <>
             <div className="flex justify-center">
-                <div className="mt-4 w-4/5 lg:w-1/3 md:w-1/2">
+                <div className="mt-8 w-4/5 lg:w-1/3 md:w-1/2 bg-white rounded-lg p-3 box">
 
                     <img src={logo} alt="" />
-                    <div className="rounded-md p-4 mt-8 box">
-                        <div className="bg-white rounded-md mb-5">
+                    <div className="rounded-md p-4 mt-8">
+                        <div className="rounded-md mb-5">
                             <h4 className="font-bold text-2xl">{newUser ? 'Create an account' : 'Log In'}</h4>
                             {
                                 user.error &&
