@@ -45,7 +45,7 @@ const Friends = ({Dots}) => {
     return (
         <div className={`mt-3 grid grid-flow-row auto-rows-max rounded-t-lg rounded-b-lg ${darkMode ? " bg-gray-800" : " bg-gray-200"}`}>
         {isLoading && <Loader />}
-        {!isLoading && !friends.length && <div className="text-red-900 text-center">Friends not found</div>}
+        {!isLoading && !friends.length && <div className="text-red-900 text-center">No friends found.</div>}
                 {
                    friends.map(friend => <FriendList friend={friend} handleFriendRemove={handleFriendRemove} Dots={false} key={friend.id}></FriendList>) 
                 }

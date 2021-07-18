@@ -41,7 +41,7 @@ const AllPeoples = () => {
     return (
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
             {isLoading && <Loader />}
-            {isLoading && !users.length && <div className="text-red-800 text-center">Peoples not found</div>}
+            {isLoading && !users.length && <div className="text-red-800 text-center">No peoples found.</div>}
             {
                 users?.map(user => <PeopleGrid user={user} handleAddFriend={handleAddFriend} key={user.id}></PeopleGrid>)
             }

@@ -102,7 +102,11 @@ app.post('/addPost', (req, res)=> {
 
 // load all posts
 app.post('/posts', (req, res) => {
-    const findQuery = `select * from posts where "authorEmail" IN ((select distinct("friendOneEmail") from friends where "friendTwoEmail"='${req.body.email}') UNION (select distinct("friendTwoEmail") from friends where "friendOneEmail"='${req.body.email}')) order by date desc;`;
+    const findQuery = `select * from posts where "authorEmail" IN 
+                    ((select distinct("friendOneEmail") from friends where "friendTwoEmail"='${req.body.email}') 
+                    UNION (select distinct("friendTwoEmail") from friends where "friendOneEmail"='${req.body.email}')) 
+                    and post_id NOT IN (select post_id from likes where email='${req.body.email}') 
+                    order by date desc;`;
     client.query(findQuery, (err, result) => {
         if(!err) {
             res.send(result.rows);
@@ -235,13 +239,13 @@ app.post('/addComment', (req, res) => {
 })
 
 app.get('/comments/:post_id', (req, res) => {
-    // const findQuery = `select * from users where email IN (select email from comments where post_id=${req.params.post_id} order by date desc)`;
-    // client.query(findQuery, (err, result) => {
-    //     if(!err) {
-    //         res.send(result.rows);
-    //     } else {
-    //         console.log(err);
-    //     }
-    // })
+    const findQuery = `select comments.id, comments.email, users.name, users.photo, comments.comment, comments.date from comments, users where post_id=${req.params.post_id} and comments.email=users.email order by comments.date desc;`;
+    client.query(findQuery, (err, result) => {
+        if(!err) {
+            res.send(result.rows);
+        } else {
+            console.log(err);
+        }
+    })
 })
 

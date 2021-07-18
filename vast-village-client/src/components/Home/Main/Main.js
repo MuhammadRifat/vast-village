@@ -5,6 +5,7 @@ import { faEllipsisH, faThumbsUp, faCommentAlt, faShare } from '@fortawesome/fre
 import { userContext } from '../../../App';
 import { Link } from 'react-router-dom';
 import Modal from 'react-modal';
+import Comments from './Comments/Comments';
 
 const customStyles = {
     content: {
@@ -41,15 +42,20 @@ const Main = ({ post }) => {
             .then(data => {
                 setIsLike(data);
             })
+    }, [loggedInUser.email, post_id])
+
+    useEffect(() => {
 
         fetch(`http://localhost:5000/likes/${post_id}`)
             .then(res => res.json())
             .then(data => setLikes(data))
+    }, [post_id])
 
+    useEffect(() => {
         fetch(`http://localhost:5000/comments/${post_id}`)
             .then(res => res.json())
             .then(data => setComments(data))
-    }, [loggedInUser.email, post_id])
+    }, [post_id, comment])
 
     const handleLike = (id, email) => {
 
@@ -73,12 +79,13 @@ const Main = ({ post }) => {
             })
     }
 
+
     const handleComment = (id, email) => {
-        console.log(id);
+        const newComment = comment.replaceAll("'", "''");
         fetch('http://localhost:5000/addComment', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ post_id: id, email: email, comment: comment, date: new Date() })
+            body: JSON.stringify({ post_id: id, email: email, comment: newComment, date: new Date() })
         })
             .then(res => res.json())
             .then(data => {
@@ -131,7 +138,7 @@ const Main = ({ post }) => {
             </p>
             <div className={`flex justify-between text-sm mt-3 ${darkMode ? "text-gray-300" : "text-gray-500"}`}>
                 <button onClick={likes.length ? openModal : ""} className="hover:underline hover:text-blue-700">{likes.length} Likes</button>
-                <button onClick={likes.length ? openModal : ""} className="hover:underline hover:text-blue-700">{comments.length} Comments</button>
+                <button onClick={comments.length && (() => setIsComments(!isComments))} className="hover:underline hover:text-blue-700">{comments.length} Comments</button>
                 <span>{shares} Shares</span>
             </div>
             <div className={`grid grid-cols-3 mt-2 text-center border-t-2 border-b-2 text-md ${darkMode ? "text-gray-200 border-gray-600" : "text-gray-600 border-gray-300"}`}>
@@ -143,8 +150,15 @@ const Main = ({ post }) => {
                 <div className="w-8 mr-2">
                     <img className="rounded-full" src={loggedInUser.photo || image} alt="" />
                 </div>
-                <input onChange={handleChange} className={`w-4/5 focus:outline-none rounded-xl px-4 py-2 ${darkMode ? "bg-gray-700" : "bg-gray-200"}`} type="text" name={`comment${post_id}`} id={`comment${post_id}`} value={comment} placeholder="Write a comment" />
+                <input onChange={handleChange} autocomplete="off" className={`w-4/5 focus:outline-none rounded-xl px-4 py-2 ${darkMode ? "bg-gray-700" : "bg-gray-200"}`} type="text" name={`comment${post_id}`} id={`comment${post_id}`} value={comment} placeholder="Write a comment" />
                 <button onClick={() => handleComment(post_id, loggedInUser.email)} type="reset" className={`${darkMode ? "bg-gray-700" : "bg-gray-200"} p-1 rounded-xl ml-2 px-3 font-bold py-2`}>Add</button>
+            </div>
+
+            <div className="mt-2">
+                {
+                    isComments &&
+                    comments.map(comment => <Comments cmnt={comment} key={comment.id} />)
+                }
             </div>
 
             <Modal

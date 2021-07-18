@@ -29,7 +29,7 @@ const Home = () => {
                 setPosts(data);
                 setIsLoading(false);
             })
-    }, [])
+    }, [loggedInUser.email])
 
     useEffect(() => {
         setIsLoading(true);
@@ -43,7 +43,7 @@ const Home = () => {
                 setRequests(data);
                 setIsLoading(false);
             })
-    }, [])
+    }, [loggedInUser.email])
 
     useEffect(() => {
         setIsLoading(true);
@@ -59,7 +59,8 @@ const Home = () => {
                 setFriends(data);
                 setIsLoading(false);
             })
-    }, [])
+    }, [loggedInUser.email])
+
 
     const handleConfirmFriend = (email) => {
         fetch('http://localhost:5000/confirmFriend', {
@@ -95,6 +96,7 @@ const Home = () => {
             })
     }
 
+
     return (
         <>
             <Header />
@@ -118,7 +120,7 @@ const Home = () => {
                     <CreatePost />
 
                     {isLoading && <Loader />}
-                    {!isLoading && !posts.length && <div className="text-red-900 text-center">Posts not found</div>}
+                    {!isLoading && !posts.length && <div className="text-red-900 text-center">No posts found.</div>}
                     {
                         posts?.map(post => <Main post={post} key={post.post_id}></Main>)
                     }

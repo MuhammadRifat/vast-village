@@ -46,7 +46,7 @@ const CreatePost = () => {
         setIsLoading(true);
 
         const newPost = {
-            postBody: post.replace("'", "''"),
+            postBody: post.replaceAll("'", "''"),
             author: loggedInUser.name,
             authorEmail: loggedInUser.email,
             authorPhoto: loggedInUser.photo,

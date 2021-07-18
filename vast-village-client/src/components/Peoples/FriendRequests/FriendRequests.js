@@ -61,7 +61,7 @@ const FriendRequests = () => {
     return (
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
         {isLoading && <Loader />}
-        {!isLoading && !requests.length && <div className="text-red-900 text-center">Friend Requests not found</div>}
+        {!isLoading && !requests.length && <div className="text-red-900 text-center">No friend requests found.</div>}
             {
                 requests?.map(request => <RequestGrid request={request} handleConfirmFriend={handleConfirmFriend} handleRemoveRequest={handleRemoveRequest} key={request.id}></RequestGrid>)
             }
