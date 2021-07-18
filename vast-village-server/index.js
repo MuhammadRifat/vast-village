@@ -178,3 +178,70 @@ app.delete('/deleteFriend', (req, res) => {
     })
 })
 
+app.post('/handleLike', (req, res) => {
+    let query = '';
+
+    if(!req.body.isLike){
+        query = `insert into likes (email, post_id, date) values ('${req.body.email}', ${req.body.post_id}, '${req.body.date}')`;
+    } else {
+        query = `delete from likes where email='${req.body.email}' AND post_id='${req.body.post_id}'`;
+    }
+
+    client.query(query, (err, result) => {
+        if(!err) {
+            res.send(result.rowCount > 0);
+        } else {
+            console.log(err);
+        }
+    })
+
+})
+
+app.post('/isLike', (req, res) => {
+    const findQuery = `select count(id) from likes where email='${req.body.email}' AND post_id=${req.body.post_id}`;
+
+    client.query(findQuery, (err, result) => {
+        if(!err) {
+            res.send(result.rows[0].count > 0);
+        } else {
+            console.log(err);
+        }
+    })
+})
+
+app.get('/likes/:post_id', (req, res) => {
+    const findQuery = `select * from users where email IN (select email from likes where post_id=${req.params.post_id} order by date desc)`;
+    client.query(findQuery, (err, result) => {
+        if(!err) {
+            res.send(result.rows);
+        } else {
+            console.log(err);
+        }
+    })
+})
+
+app.post('/addComment', (req, res) => {
+    console.log(req.body);
+    const insertQuery = `insert into comments (post_id, comment, email, date) values (${req.body.post_id}, '${req.body.comment}', '${req.body.email}', '${req.body.date}')`;
+
+    client.query(insertQuery, (err, result) => {
+        if(!err) {
+            res.send(result.rowCount > 0);
+        } else {
+            console.log(err);
+        }
+    })
+
+})
+
+app.get('/comments/:post_id', (req, res) => {
+    // const findQuery = `select * from users where email IN (select email from comments where post_id=${req.params.post_id} order by date desc)`;
+    // client.query(findQuery, (err, result) => {
+    //     if(!err) {
+    //         res.send(result.rows);
+    //     } else {
+    //         console.log(err);
+    //     }
+    // })
+})
+

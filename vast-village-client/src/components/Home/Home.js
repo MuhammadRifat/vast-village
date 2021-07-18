@@ -43,7 +43,7 @@ const Home = () => {
                 setRequests(data);
                 setIsLoading(false);
             })
-    }, [loggedInUser.email])
+    }, [])
 
     useEffect(() => {
         setIsLoading(true);
@@ -59,7 +59,7 @@ const Home = () => {
                 setFriends(data);
                 setIsLoading(false);
             })
-    }, [loggedInUser.email])
+    }, [])
 
     const handleConfirmFriend = (email) => {
         fetch('http://localhost:5000/confirmFriend', {
