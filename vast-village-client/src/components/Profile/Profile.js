@@ -51,11 +51,11 @@ const Profile = () => {
 
                 {/* Friends part */}
                 <div className="hidden md:block md:w-1/4 h-full fixed left-2 lg:left-44">
-                    <div className={`mt-6 py-2 border-2 rounded-lg flex justify-center ${darkMode ? "bg-gray-800 border-gray-700" : "bg-white"}`}>
-                       <div className="text-center">
-                           <img className="w-24 rounded-full ml-7" src={photo} alt="" />
-                           <h3 className="font-bold mt-2 text-lg">{name}</h3>
+                    <div className={`mt-6 py-2 border-2 rounded-lg ${darkMode ? "bg-gray-800 border-gray-700" : "bg-white"}`}>
+                       <div className="flex justify-center">
+                           <img className="w-24 rounded-full" src={photo} alt="" />
                         </div>
+                           <h3 className="font-bold mt-2 text-lg text-center">{name}</h3>
                     </div>
                 </div>
 
