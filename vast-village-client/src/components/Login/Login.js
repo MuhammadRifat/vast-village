@@ -128,30 +128,30 @@ const Login = () => {
             photo: res.photoURL || "https://i.ibb.co/CzkSST0/avater.png",
             error: ''
         }
-        fetch('http://localhost:5000/addUser', {
+        fetch('https://vast-village-server.herokuapp.com/addUser', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({...newUser, date: new Date()})
+            body: JSON.stringify({ ...newUser, date: new Date() })
         })
-        .then(res => res.json())
-        .then(data => {
-            // console.log(data);
-        })
+            .then(res => res.json())
+            .then(data => {
+                // console.log(data);
+            })
 
         setCookie("email", res.email, 7);
-        setLoggedInUser({...newUser, darkMode: loggedInUser.darkMode});
+        setLoggedInUser({ ...newUser, darkMode: loggedInUser.darkMode });
         isReplace && history.replace(from);
     }
 
     //set Cookie
     function setCookie(cname, cvalue, exdays) {
         const d = new Date();
-        d.setTime(d.getTime() + (exdays*24*60*60*1000));
+        d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
         let expires = "expires=" + d.toGMTString();
         document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-      }
+    }
 
     // Conditionally showing log in and create new account button
     const handleLogInOrCreate = () => {
@@ -180,10 +180,7 @@ const Login = () => {
                                 loggedInUser.error &&
                                 <h6 className="text-red-500 text-center mt-3">{loggedInUser.error}</h6>
                             }
-                            {
-                                loggedInUser.email &&
-                                <h6 className="text-green-500 text-center mt-3">Sign up successful</h6>
-                            }
+
                             <form className="login-form" onSubmit={handleSubmit}>
                                 {
                                     isLoading &&
@@ -191,22 +188,22 @@ const Login = () => {
                                 }
                                 {
                                     newUser &&
-                                    <input type="text" onBlur={handleBlur} name="name" placeholder="Name" required />
+                                    <input type="text" onBlur={handleBlur} name="name" placeholder="Name" disabled required />
                                 }
                                 <br />
-                                <input type="text" onBlur={handleBlur} name="email" placeholder="Email" required />
+                                <input type="text" onBlur={handleBlur} name="email" placeholder="Email" disabled required />
                                 <br />
                                 {
                                     !user.emailValid &&
                                     <span className="text-red-500">Enter a valid email</span>
                                 }
-                                <input type="password" onBlur={handleBlur} name="password" placeholder="Password" required /><br />
+                                <input type="password" onBlur={handleBlur} name="password" placeholder="Password" disabled required /><br />
                                 {
                                     !user.passwordValid &&
                                     <span className="text-red-500">Enter a valid password (at least 8 character and number)</span>
                                 }
                                 {
-                                    newUser && <input type="password" onBlur={handleBlur} name="confirmPassword" placeholder="Confirm password" required />
+                                    newUser && <input type="password" onBlur={handleBlur} name="confirmPassword" placeholder="Confirm password" disabled required />
                                 }
                                 <br />
                                 <input id="submit-btn" type="submit" value={newUser ? "Create an account" : "Login"} />

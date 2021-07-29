@@ -17,7 +17,7 @@ const Profile = () => {
 
     useEffect(() => {
         setIsLoading(true);
-        fetch(`http://localhost:5000/user`, {
+        fetch(`https://vast-village-server.herokuapp.com/user`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({email: email})
@@ -31,7 +31,7 @@ const Profile = () => {
 
     useEffect(() => {
         setIsLoading(true);
-        fetch('http://localhost:5000/getUserPosts', {
+        fetch('https://vast-village-server.herokuapp.com/getUserPosts', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({email: email})

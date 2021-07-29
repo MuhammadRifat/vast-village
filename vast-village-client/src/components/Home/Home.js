@@ -17,7 +17,7 @@ const Home = () => {
 
     useEffect(() => {
         setIsLoading(true);
-        fetch('http://localhost:5000/posts', {
+        fetch('https://vast-village-server.herokuapp.com/posts', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -33,7 +33,7 @@ const Home = () => {
 
     useEffect(() => {
         setIsLoading(true);
-        fetch('http://localhost:5000/friendRequests', {
+        fetch('https://vast-village-server.herokuapp.com/friendRequests', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email: loggedInUser.email })
@@ -47,7 +47,7 @@ const Home = () => {
 
     useEffect(() => {
         setIsLoading(true);
-        fetch('http://localhost:5000/friends', {
+        fetch('https://vast-village-server.herokuapp.com/friends', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -63,7 +63,7 @@ const Home = () => {
 
 
     const handleConfirmFriend = (email) => {
-        fetch('http://localhost:5000/confirmFriend', {
+        fetch('https://vast-village-server.herokuapp.com/confirmFriend', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -80,7 +80,7 @@ const Home = () => {
     }
 
     const handleRemoveRequest = (email) => {
-        fetch('http://localhost:5000/deleteRequest', {
+        fetch('https://vast-village-server.herokuapp.com/deleteRequest', {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'

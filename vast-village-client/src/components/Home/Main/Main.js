@@ -28,12 +28,12 @@ const Main = ({ post }) => {
     const [comment, setComment] = useState("");
     const [isComments, setIsComments] = useState(false);
     const [postLength, setPostLength] = useState(140);
-    const { post_id, author, authorPhoto, authorEmail, postBody, date, shares } = post;
+    const { post_id, author, authorphoto, authoremail, postbody, date, shares } = post;
     const [modalIsOpen, setIsOpen] = useState(false);
     let subtitle;
 
     useEffect(() => {
-        fetch('http://localhost:5000/isLike', {
+        fetch('https://vast-village-server.herokuapp.com/isLike', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ post_id: post_id, email: loggedInUser.email })
@@ -46,13 +46,13 @@ const Main = ({ post }) => {
 
     useEffect(() => {
 
-        fetch(`http://localhost:5000/likes/${post_id}`)
+        fetch(`https://vast-village-server.herokuapp.com/likes/${post_id}`)
             .then(res => res.json())
             .then(data => setLikes(data))
     }, [post_id])
 
     useEffect(() => {
-        fetch(`http://localhost:5000/comments/${post_id}`)
+        fetch(`https://vast-village-server.herokuapp.com/comments/${post_id}`)
             .then(res => res.json())
             .then(data => setComments(data))
     }, [post_id, comment])
@@ -68,7 +68,7 @@ const Main = ({ post }) => {
         }
 
         setIsLike(!isLike);
-        fetch('http://localhost:5000/handleLike', {
+        fetch('https://vast-village-server.herokuapp.com/handleLike', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ post_id: id, email: loggedInUser.email, date: new Date(), isLike: isLike })
@@ -82,7 +82,8 @@ const Main = ({ post }) => {
 
     const handleComment = (id, email) => {
         const newComment = comment.replaceAll("'", "''");
-        fetch('http://localhost:5000/addComment', {
+        
+        fetch('https://vast-village-server.herokuapp.com/addComment', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ post_id: id, email: email, comment: newComment, date: new Date() })
@@ -121,10 +122,10 @@ const Main = ({ post }) => {
             <div className="flex justify-between">
                 <div className="flex">
                     <div className="w-12 mr-2">
-                        <Link to={`/profile/${authorEmail}`}><img className="rounded-full" src={authorPhoto || image} alt="" /></Link>
+                        <Link to={`/profile/${authoremail}`}><img className="rounded-full" src={authorphoto || image} alt="" /></Link>
                     </div>
                     <div>
-                        <Link to={`/profile/${authorEmail}`}><h3 className="font-bold">{author}</h3></Link>
+                        <Link to={`/profile/${authoremail}`}><h3 className="font-bold">{author}</h3></Link>
                         <small>{new Date(date).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</small>
                     </div>
                 </div>
@@ -133,8 +134,8 @@ const Main = ({ post }) => {
                 </button>
             </div>
             <p className="text-justify mt-2 px-1">
-                {postBody?.slice(0, postLength)}
-                {postBody.length > 140 && postLength === 140 && <span>...<button onClick={() => setPostLength(postBody.length)} className="text-blue-500">See More</button></span>}
+                {postbody?.slice(0, postLength)}
+                {postbody?.length > 140 && postLength === 140 && <span>...<button onClick={() => setPostLength(postbody.length)} className="text-blue-500">See More</button></span>}
             </p>
             <div className={`flex justify-between text-sm mt-3 ${darkMode ? "text-gray-300" : "text-gray-500"}`}>
                 <button onClick={likes.length ? openModal : ""} className="hover:underline hover:text-blue-700">{likes.length} Likes</button>

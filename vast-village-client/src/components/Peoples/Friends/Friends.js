@@ -11,7 +11,7 @@ const Friends = ({Dots}) => {
 
     useEffect(() => {
         setIsLoading(true);
-        fetch('http://localhost:5000/friends', {
+        fetch('https://vast-village-server.herokuapp.com/friends', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -26,7 +26,7 @@ const Friends = ({Dots}) => {
     }, [loggedInUser.email])
 
     const handleFriendRemove = (email, id) => {
-        fetch('http://localhost:5000/deleteFriend', {
+        fetch('https://vast-village-server.herokuapp.com/deleteFriend', {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'

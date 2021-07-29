@@ -10,7 +10,7 @@ const AllPeoples = () => {
 
     useEffect(() => {
         setIsLoading(true);
-        fetch('http://localhost:5000/users', {
+        fetch('https://vast-village-server.herokuapp.com/users', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email: loggedInUser.email })
@@ -23,7 +23,7 @@ const AllPeoples = () => {
     }, [loggedInUser.email])
 
     const handleAddFriend = (email) => {
-        fetch('http://localhost:5000/addFriend', {
+        fetch('https://vast-village-server.herokuapp.com/addFriend', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -41,7 +41,7 @@ const AllPeoples = () => {
     return (
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
             {isLoading && <Loader />}
-            {isLoading && !users.length && <div className="text-red-800 text-center">No peoples found.</div>}
+            {!isLoading && !users.length && <div className="text-red-800 text-center">No peoples found.</div>}
             {
                 users?.map(user => <PeopleGrid user={user} handleAddFriend={handleAddFriend} key={user.id}></PeopleGrid>)
             }

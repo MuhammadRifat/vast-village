@@ -55,8 +55,9 @@ const CreatePost = () => {
             comments: 0,
             shares: 0
         };
+        console.log(newPost);
 
-        fetch('http://localhost:5000/addPost', {
+        fetch('https://vast-village-server.herokuapp.com/addPost', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

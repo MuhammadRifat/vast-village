@@ -19,7 +19,7 @@ const Peoples = () => {
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost:5000/users', {
+        fetch('https://vast-village-server.herokuapp.com/users', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email: loggedInUser.email })
@@ -31,7 +31,7 @@ const Peoples = () => {
     }, [loggedInUser.email])
 
     const handleAddFriend = (email) => {
-        fetch('http://localhost:5000/addFriend', {
+        fetch('https://vast-village-server.herokuapp.com/addFriend', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

@@ -1,5 +1,5 @@
 export const checkEmail = (loggedInUser, setLoggedInUser) => {
-    fetch('http://localhost:5000/user', {
+    fetch('https://vast-village-server.herokuapp.com/user', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
