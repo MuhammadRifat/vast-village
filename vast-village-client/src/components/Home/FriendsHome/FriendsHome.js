@@ -9,6 +9,7 @@ const FriendsHome = ({ friend, request, handleConfirmFriend, handleRemoveRequest
 
     return (
         <div className={`py-2 px-3 border-b-2 rounded-md flex justify-between w-full ${darkMode ? "border-gray-700 bg-gray-800 text-gray-100" : "border-gray-300 bg-white text-gray-700"}`}>
+            {/* Photo and Name */}
             <Link to={`/profile/${email}`}>
                 <div className="flex items-center w-60">
                     <img className="w-16 rounded-full" src={photo} alt="" />
@@ -16,6 +17,7 @@ const FriendsHome = ({ friend, request, handleConfirmFriend, handleRemoveRequest
                 </div>
             </Link>
 
+            {/* Buttons */}
             <div className="flex items-center text-right">
                 <div>
                     {!request && <button className={`px-3 py-1 rounded-2xl bg-transparent border-2 mr-3 ${darkMode ? "border-gray-600 hover:bg-gray-700" : "border-gray-400 hover:bg-gray-300"}`}>Message</button>}

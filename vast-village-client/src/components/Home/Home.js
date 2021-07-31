@@ -6,6 +6,7 @@ import CreatePost from '../CreatePost/CreatePost';
 import Loader from '../Loader/Loader';
 import { userContext } from '../../App';
 import FriendsHome from './FriendsHome/FriendsHome';
+import Chat from './Chat/Chat';
 
 const Home = () => {
     const [posts, setPosts] = useState([]);
@@ -15,6 +16,7 @@ const Home = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [requests, setRequests] = useState([]);
 
+    // Load all friends posts
     useEffect(() => {
         setIsLoading(true);
         fetch('https://vast-village-server.herokuapp.com/posts', {
@@ -31,6 +33,7 @@ const Home = () => {
             })
     }, [loggedInUser.email])
 
+    // Load all friend requests
     useEffect(() => {
         setIsLoading(true);
         fetch('https://vast-village-server.herokuapp.com/friendRequests', {
@@ -45,6 +48,7 @@ const Home = () => {
             })
     }, [loggedInUser.email])
 
+    // Load all friends
     useEffect(() => {
         setIsLoading(true);
         fetch('https://vast-village-server.herokuapp.com/friends', {
@@ -62,6 +66,7 @@ const Home = () => {
     }, [loggedInUser.email])
 
 
+    // Handle confirm button
     const handleConfirmFriend = (email) => {
         fetch('https://vast-village-server.herokuapp.com/confirmFriend', {
             method: 'POST',
@@ -79,6 +84,7 @@ const Home = () => {
             })
     }
 
+    // Handle friend request delete button
     const handleRemoveRequest = (email) => {
         fetch('https://vast-village-server.herokuapp.com/deleteRequest', {
             method: 'DELETE',
@@ -103,9 +109,9 @@ const Home = () => {
             <div className={`mt-28 md:mt-16 flex flex-col md:flex-row justify-center w-full h-full`}>
 
                 {/* Friends part */}
-                <div className="hidden md:block md:w-1/4 h-full fixed left-2 hide-scrollbar">
+                <div className="hidden md:block md:w-1/4 h-full fixed left-2">
                     <h2 className={`text-2xl font-bold fixed w-1/4 p-1 border-b-2 ${darkMode ? "border-gray-800 text-gray-100" : " bg-gray-100 text-gray-600"}`}>Friends</h2>
-                    <div className="mt-12">
+                    <div className="mt-12 hide-scrollbar">
                         {
                             requests.map(friend => <FriendsHome friend={friend} request={true} handleConfirmFriend={handleConfirmFriend} handleRemoveRequest={handleRemoveRequest} key={friend.key} />)
                         }
@@ -116,7 +122,7 @@ const Home = () => {
                 </div>
 
                 {/* Main part */}
-                <div className="md:w-2/5 relative top-0">
+                <div className="md:w-2/5 px-1 relative top-0">
                     <CreatePost />
 
                     {isLoading && <Loader />}
@@ -131,7 +137,7 @@ const Home = () => {
                     <h2 className={`text-2xl font-bold fixed w-1/4 p-1 border-b-2 ${darkMode ? "border-gray-800 text-gray-100" : " bg-gray-100 text-gray-600"}`}>Messaging</h2>
                     <div className="mt-10">
                         {/* {
-                            posts?.map(friend => <Chats friend={friend} handleFriend={handleFriend} key={friend.id}></Chats>)
+                            posts?.map(friend => <Chat friend={friend} handleFriend={handleFriend} key={friend.id}></Chat>)
                         } */}
                     </div>
                 </div>

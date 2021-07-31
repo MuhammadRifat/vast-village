@@ -4,6 +4,7 @@ import {
   Switch,
   Route
 } from "react-router-dom";
+import Chats from "./components/Chats/Chats";
 
 import Home from "./components/Home/Home";
 import Login from "./components/Login/Login";
@@ -67,7 +68,7 @@ function App() {
             <Profile />
           </PrivateRoute>
           <PrivateRoute path="/chats">
-            <Home />
+            <Chats />
           </PrivateRoute>
           <PrivateRoute path="/peoples">
             <Peoples />

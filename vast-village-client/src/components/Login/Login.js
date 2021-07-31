@@ -165,8 +165,8 @@ const Login = () => {
     }
     return (
         <>
-            <div className="flex justify-center">
-                <div className="mt-8 w-4/5 lg:w-1/3 md:w-1/2 bg-white rounded-lg p-3 box">
+            <div className="flex justify-center p-3">
+                <div className="mt-8 w-full lg:w-1/3 md:w-1/2 bg-white rounded-lg p-3 box">
 
                     <img src={logo} alt="" />
                     <div className="rounded-md p-4 mt-8">

@@ -133,7 +133,7 @@ const Main = ({ post }) => {
                     <FontAwesomeIcon icon={faEllipsisH} />
                 </button>
             </div>
-            <p className="text-justify mt-2 px-1">
+            <p className="text-left mt-2 px-1">
                 {postbody?.slice(0, postLength)}
                 {postbody?.length > 140 && postLength === 140 && <span>...<button onClick={() => setPostLength(postbody.length)} className="text-blue-500">See More</button></span>}
             </p>
