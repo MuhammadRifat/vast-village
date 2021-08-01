@@ -4,8 +4,12 @@ import Header from '../Header/Header';
 import Loader from '../Loader/Loader';
 import ChatBox from './ChatBox/ChatBox';
 import ChatFriend from './ChatFriend/ChatFriend';
+// import socketClient from 'socket.io-client';
+
+// const SERVER = "http://localhost:5000/";
 
 const Chats = () => {
+    // const socket = socketClient(SERVER);
     const [loggedInUser] = useContext(userContext);
     const { darkMode } = loggedInUser;
     const [friends, setFriends] = useState([]);
@@ -29,6 +33,12 @@ const Chats = () => {
                 setIsLoading(false);
             })
     }, [loggedInUser.email])
+
+    // useEffect(() => {
+    //     socket.on('rifat', (msg) => {
+    //         console.log(msg);
+    //     })
+    // }, [])
     return (
         <>
             <Header />
@@ -49,7 +59,7 @@ const Chats = () => {
                     {
                         isLoading && <Loader />
                     }
-                    <div className={`h-screen ${darkMode ? "bg-gray-800" : "bg-white"}`}>
+                    <div className={`${darkMode ? "bg-gray-800" : "bg-white"}`}>
                         <ChatBox chat={chat} />
                     </div>
                 </div>
