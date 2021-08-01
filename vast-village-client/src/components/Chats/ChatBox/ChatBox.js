@@ -23,7 +23,7 @@ const ChatBox = ({ chat }) => {
             .then(data => {
                 setChats(data);
             })
-    }, [email, loggedInUser.email, isMessage])
+    })
 
     const handleSent = (e) => {
         e.preventDefault();
@@ -61,13 +61,13 @@ const ChatBox = ({ chat }) => {
                     <h3 className="ml-4 text-xl font-bold">{name}</h3>
                 </div>
             </div>
-            <div className="h-96 overflow-y-scroll pt-16 pb-2 rounded-b-md px-2">
+            <div className="h-screen overflow-y-scroll pt-16 pb-2 rounded-b-md px-2">
                 {
-                    chats?.map(message => <Message message={message} key={message.id} />)
+                    chats?.map(message => <Message msg={message} photo={photo} key={message.id} />)
                 }
             </div>
             <div className="fixed bottom-0 chat-box">
-                <form onSubmit={handleSent} className="w-full flex rounded-b-md p-2 shadow-2xl">
+                <form onSubmit={handleSent} className={`w-full flex rounded-b-md p-2 shadow-2xl ${darkMode ? "bg-gray-700" : "bg-white"}`}>
                     <input onChange={handleChange} className={`w-full rounded-md focus:outline-none px-2 text-lg ${darkMode ? "bg-gray-700" : "bg-gray-200"}`} value={message} autocomplete="off" placeholder="Write a message" />
                     <button type="submit" className={`ml-2 px-3 focus:outline-none rounded-lg text-lg py-2 ${darkMode ? "bg-gray-700" : "bg-gray-200"}`}><FontAwesomeIcon icon={faPaperPlane} /></button>
                 </form>
