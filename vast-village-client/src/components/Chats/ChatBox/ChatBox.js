@@ -4,6 +4,10 @@ import './ChatBox.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 import Message from './Message/Message';
+// import {io} from 'socket.io-client';
+
+// const socket = io("wss://localhost:5000/");
+
 
 const ChatBox = ({ chat }) => {
     const { email, name, photo } = chat;
@@ -23,10 +27,13 @@ const ChatBox = ({ chat }) => {
             .then(data => {
                 setChats(data);
             })
-    })
+    }, [])
+
 
     const handleSent = (e) => {
         e.preventDefault();
+
+        // socket.emit('myName', "rifat");
 
         const newMessage = {
             sender_email: loggedInUser.email,

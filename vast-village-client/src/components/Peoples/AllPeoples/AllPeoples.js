@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { userContext } from '../../../App';
-import Loader from '../../Loader/Loader';
 import PeopleGrid from './PeopleGrid/PeopleGrid';
+import PeopleGridSkeleton from '../../Loader/PeopleGridSkeleton/PeopleGridSkeleton';
 
 const AllPeoples = () => {
     const [loggedInUser] = useContext(userContext);
     const [users, setUsers] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         setIsLoading(true);
@@ -40,7 +40,7 @@ const AllPeoples = () => {
     }
     return (
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
-            {isLoading && <Loader />}
+            {isLoading && <PeopleGridSkeleton />}
             {!isLoading && !users.length && <div className="text-red-800 text-center">No peoples found.</div>}
             {
                 users?.map(user => <PeopleGrid user={user} handleAddFriend={handleAddFriend} key={user.id}></PeopleGrid>)

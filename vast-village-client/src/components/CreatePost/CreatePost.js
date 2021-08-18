@@ -19,7 +19,7 @@ const customStyles = {
 const CreatePost = () => {
     let subtitle;
     const [loggedInUser] = useContext(userContext);
-    const {darkMode} = loggedInUser;
+    const { darkMode } = loggedInUser;
     const [modalIsOpen, setIsOpen] = useState(false);
     const [post, setPost] = useState('');
     const [isSuccess, setIsSuccess] = useState(false);
@@ -42,7 +42,8 @@ const CreatePost = () => {
         setPost(e.target.value);
     }
 
-    const handleNewPost = () => {
+    const handleNewPost = (e) => {
+        e.preventDefault();
         setIsLoading(true);
 
         const newPost = {
@@ -55,7 +56,6 @@ const CreatePost = () => {
             comments: 0,
             shares: 0
         };
-        console.log(newPost);
 
         fetch('https://vast-village-server.herokuapp.com/addPost', {
             method: 'POST',
@@ -111,12 +111,13 @@ const CreatePost = () => {
                         </div>
                         <h3 className="font-bold text-gray-600">{loggedInUser.name}</h3>
                     </div>
-                    <div>
-                        <textarea autoFocus onBlur={handleBlur} className="focus:outline-none" cols="60" rows="5" placeholder="Write text here.."></textarea>
-                    </div>
-                    <div className="flex justify-end mt-3">
-                        <button onClick={handleNewPost} className="font-bold rounded-xl bg-gray-500 text-white px-3 py-1">Post</button>
-                    </div>
+                    <form onSubmit={handleNewPost}>
+                        <textarea autoFocus onBlur={handleBlur} className="focus:outline-none" cols="60" rows="5" placeholder="Write text here.." required></textarea>
+
+                        <div className="flex justify-end mt-3">
+                            <button type="submit" className="font-bold rounded-xl bg-gray-500 text-white px-3 py-1">Post</button>
+                        </div>
+                    </form>
                 </Modal>
             </div>
         </div>

@@ -3,17 +3,17 @@ import Header from '../Header/Header';
 import Main from './Main/Main';
 import './Home.css';
 import CreatePost from '../CreatePost/CreatePost';
-import Loader from '../Loader/Loader';
 import { userContext } from '../../App';
 import FriendsHome from './FriendsHome/FriendsHome';
-import Chat from './Chat/Chat';
+import PostSkeleton from '../Loader/PostSkeleton/PostSkeleton';
+import FriendsSkeleton from '../Loader/FriendsSkeleton/FriendsSkeleton';
 
 const Home = () => {
     const [posts, setPosts] = useState([]);
     const [friends, setFriends] = useState([]);
     const [loggedInUser] = useContext(userContext);
     const { darkMode } = loggedInUser;
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [requests, setRequests] = useState([]);
 
     // Load all friends posts
@@ -111,7 +111,8 @@ const Home = () => {
                 {/* Friends part */}
                 <div className="hidden md:block md:w-1/4 h-full fixed left-2">
                     <h2 className={`text-2xl font-bold fixed w-1/4 p-1 border-b-2 ${darkMode ? "border-gray-800 text-gray-100" : " bg-gray-100 text-gray-600"}`}>Friends</h2>
-                    <div className="mt-12 hide-scrollbar">
+                    <div className="mt-12 w-full hide-scrollbar">
+                        {isLoading && <FriendsSkeleton />}
                         {
                             requests.map(friend => <FriendsHome friend={friend} request={true} handleConfirmFriend={handleConfirmFriend} handleRemoveRequest={handleRemoveRequest} key={friend.key} />)
                         }
@@ -125,7 +126,7 @@ const Home = () => {
                 <div className="md:w-2/5 px-1 relative top-0">
                     <CreatePost />
 
-                    {isLoading && <Loader />}
+                    {isLoading && <PostSkeleton />}
                     {!isLoading && !posts.length && <div className="text-red-900 text-center">No posts found.</div>}
                     {
                         posts?.map(post => <Main post={post} key={post.post_id}></Main>)

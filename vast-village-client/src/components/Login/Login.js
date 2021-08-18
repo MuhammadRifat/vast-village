@@ -165,6 +165,7 @@ const Login = () => {
     }
     return (
         <>
+            <h4 className="text-red-700 text-xl text-center">This site is under development</h4>
             <div className="flex justify-center p-3">
                 <div className="mt-8 w-full lg:w-1/3 md:w-1/2 bg-white rounded-lg p-3 box">
 

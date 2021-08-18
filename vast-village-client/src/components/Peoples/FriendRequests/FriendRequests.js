@@ -1,13 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { userContext } from '../../../App';
 import Loader from '../../Loader/Loader';
+import PeopleGridSkeleton from '../../Loader/PeopleGridSkeleton/PeopleGridSkeleton';
 import PeopleGrid from '../AllPeoples/PeopleGrid/PeopleGrid';
 import RequestGrid from './RequestGrid/RequestGrid';
 
 const FriendRequests = () => {
     const [requests, setRequests] = useState([]);
     const [loggedInUser] = useContext(userContext);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
 
     useEffect(() => {
@@ -60,7 +61,7 @@ const FriendRequests = () => {
 
     return (
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
-        {isLoading && <Loader />}
+        {isLoading && <PeopleGridSkeleton />}
         {!isLoading && !requests.length && <div className="text-red-900 text-center">No friend requests found.</div>}
             {
                 requests?.map(request => <RequestGrid request={request} handleConfirmFriend={handleConfirmFriend} handleRemoveRequest={handleRemoveRequest} key={request.id}></RequestGrid>)

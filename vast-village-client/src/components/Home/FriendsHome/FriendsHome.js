@@ -11,8 +11,8 @@ const FriendsHome = ({ friend, request, handleConfirmFriend, handleRemoveRequest
         <div className={`py-2 px-3 border-b-2 rounded-md flex justify-between w-full ${darkMode ? "border-gray-700 bg-gray-800 text-gray-100" : "border-gray-300 bg-white text-gray-700"}`}>
             {/* Photo and Name */}
             <Link to={`/profile/${email}`}>
-                <div className="flex items-center w-60">
-                    <img className="w-16 rounded-full" src={photo} alt="" />
+                <div className="flex items-center">
+                    <img className="w-12 rounded-full" src={photo} alt="" />
                     <h3 className={`font-bold text-md ml-3`}>{name}</h3>
                 </div>
             </Link>

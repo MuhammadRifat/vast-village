@@ -17,7 +17,7 @@ const FriendList = ({ friend, handleFriendRemove }) => {
     }, [dropdown])
 
     return (
-        <div className={`py-2 px-4 border-b-2 flex justify-between items-center ${darkMode ? "border-gray-700  text-gray-100" : "border-gray-300  text-gray-700"}`}>
+        <div className={`py-2 px-4 border-t-2 flex justify-between items-center ${darkMode ? "border-gray-700  text-gray-100" : "border-gray-300  text-gray-700"}`}>
             <Link to={`/profile/${email}`}>
                 <div className="flex items-center">
                     <img className="w-16 rounded-full" src={photo} alt="" />

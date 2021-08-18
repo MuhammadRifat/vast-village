@@ -41,7 +41,7 @@ const Header = () => {
 
     return (
         <div className="fixed top-0 w-full z-10">
-            <div className={`grid grid-cols-1 py-3 md:grid-cols-2 px-10 lg:px-36 ${darkMode ? "bg-gray-800" : "bg-gray-300"}`}>
+            <div className={`grid grid-cols-1 py-3 md:grid-cols-2 sm:px-10 lg:px-36 ${darkMode ? "bg-gray-800" : "bg-gray-300"}`}>
                 {/* logo and search */}
                 <div className="flex justify-center align-items-center">
                     <div className="w-10 bg-white rounded-full">
@@ -51,7 +51,7 @@ const Header = () => {
                         <input type="text" name="search" id="search" onChange={handleSearch} onClick={() => setFocus(!focus)} autocomplete="off" className={`px-3 py-2 mx-5 w-full rounded-md focus:outline-none ${darkMode ? "bg-gray-600 text-white" : "bg-gray-50 text-black"}`} placeholder="Search" />
                         {
                             focus &&
-                            <div className={`${darkMode ? "bg-gray-700" : "bg-white shadow-2xl"} absolute rounded-t-lg w-4/5 mt-2`}>
+                            <div className={`${darkMode ? "bg-gray-700" : "bg-white shadow-2xl"} absolute rounded-t-lg w-full left-5 mt-2`}>
                                 {searchData?.map(data => <SearchData friend={data} key={data.id} />)}
                             </div>
                         }
@@ -59,13 +59,13 @@ const Header = () => {
                 </div >
 
                 {/* Navigation */}
-                <div div className="flex justify-center align-items-center mt-3 md:mt-0" onClick={() => setFocus(false)}>
+                <div className="flex justify-center align-items-center mt-3 md:mt-0" onClick={() => setFocus(false)}>
                     <button onClick={() => history.push('/')} className="p-1 bg-gray-500 rounded-3xl w-10 h-10 text-white text-xl"><FontAwesomeIcon icon={faHome} /></button>
-                    <button onClick={() => history.push('/chats')} className="ml-6 p-1 bg-gray-500 rounded-3xl w-10 h-10 text-white text-xl"><FontAwesomeIcon icon={faEnvelope} /></button>
-                    <button onClick={() => history.push('/peoples')} className="ml-6 p-1 bg-gray-500 rounded-3xl w-10 h-10 text-white text-xl"><FontAwesomeIcon icon={faUserFriends} /></button>
-                    <button onClick={() => history.push('/notifications')} className="ml-6 p-1 bg-gray-500 rounded-3xl w-10 h-10 text-white text-xl"><FontAwesomeIcon icon={faBell} /></button>
-                    <div className="relative">
-                        <button onClick={() => setDropdown(!dropdown)} className="ml-6 p-1 bg-gray-500 rounded-3xl w-10 h-10 text-white text-xl"><FontAwesomeIcon icon={faCaretDown} /></button>
+                    <button onClick={() => history.push('/chats')} className="ml-2 sm:ml-6 p-1 bg-gray-500 rounded-3xl w-10 h-10 text-white text-xl"><FontAwesomeIcon icon={faEnvelope} /></button>
+                    <button onClick={() => history.push('/peoples')} className="ml-2 sm:ml-6 p-1 bg-gray-500 rounded-3xl w-10 h-10 text-white text-xl"><FontAwesomeIcon icon={faUserFriends} /></button>
+                    <button onClick={() => history.push('/notifications')} className="ml-2 sm:ml-6 p-1 bg-gray-500 rounded-3xl w-10 h-10 text-white text-xl"><FontAwesomeIcon icon={faBell} /></button>
+                    <div>
+                        <button onClick={() => setDropdown(!dropdown)} className="ml-2 sm:ml-6 z-0 p-1 bg-gray-500 rounded-3xl w-10 h-10 text-white text-xl"><FontAwesomeIcon icon={faCaretDown} /></button>
                         {dropdown && <div className={`absolute w-32 mt-1 rounded-md shadow-lg grid grid-rows-2 ${darkMode ? "bg-gray-300" : "bg-white"}`}>
                             <button onClick="" className=" p-1 hover:bg-gray-200 rounded-t-md border-b-2">
                                 <Switch onChange={() => setLoggedInUser({ ...loggedInUser, darkMode: !loggedInUser.darkMode })} checked={loggedInUser.darkMode} checkedIcon={false} uncheckedIcon={false} />
@@ -73,7 +73,7 @@ const Header = () => {
                             <button onClick={handleLogout} className="p-1 hover:bg-gray-200 rounded-b-md">Log out</button>
                         </div>}
                     </div>
-                    <button onClick={() => history.push(`/profile/${loggedInUser.email}`)} className="ml-6 bg-gray-200 rounded-full w-10"><img className="rounded-full w-10" src={loggedInUser.photo || profile} alt="" /></button>
+                    <button onClick={() => history.push(`/profile/${loggedInUser.email}`)} className="ml-2 sm:ml-6 bg-gray-200 rounded-full w-10"><img className="rounded-full w-10" src={loggedInUser.photo || profile} alt="" /></button>
                 </div >
             </div >
         </div >

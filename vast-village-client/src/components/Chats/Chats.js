@@ -4,12 +4,8 @@ import Header from '../Header/Header';
 import Loader from '../Loader/Loader';
 import ChatBox from './ChatBox/ChatBox';
 import ChatFriend from './ChatFriend/ChatFriend';
-// import socketClient from 'socket.io-client';
-
-// const SERVER = "http://localhost:5000/";
 
 const Chats = () => {
-    // const socket = socketClient(SERVER);
     const [loggedInUser] = useContext(userContext);
     const { darkMode } = loggedInUser;
     const [friends, setFriends] = useState([]);

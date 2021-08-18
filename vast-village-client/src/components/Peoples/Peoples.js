@@ -16,36 +16,6 @@ import FriendRequests from './FriendRequests/FriendRequests';
 const Peoples = () => {
     const [loggedInUser] = useContext(userContext);
     const { darkMode } = loggedInUser;
-    const [users, setUsers] = useState([]);
-
-    useEffect(() => {
-        fetch('https://vast-village-server.herokuapp.com/users', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: loggedInUser.email })
-        })
-            .then(res => res.json())
-            .then(data => {
-                setUsers(data);
-            })
-    }, [loggedInUser.email])
-
-    const handleAddFriend = (email) => {
-        fetch('https://vast-village-server.herokuapp.com/addFriend', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ friendOneEmail: loggedInUser.email, friendTwoEmail: email, date: new Date() })
-        })
-            .then(res => res.json())
-            .then(data => {
-                if (data) {
-                    const newUsers = users.filter(user => user.email !== email);
-                    setUsers(newUsers);
-                }
-            })
-    }
 
     const routes = [
         {
@@ -57,7 +27,7 @@ const Peoples = () => {
         {
             path: "/peoples/friends",
             sidebar: () => "",
-            main: () => <Friends /> || <NotFound />
+            main: () => <Friends email={loggedInUser.email}/> || <NotFound />
         },
         {
             path: "/peoples/friendrequests",
@@ -69,7 +39,7 @@ const Peoples = () => {
     return (
         <>
             <Header />
-            <div className={`mt-28 md:mt-16 flex flex-col md:flex-row justify-center w-full h-full`}>
+            <div className={`mt-20 md:mt-16 flex flex-col md:flex-row justify-center w-full h-full`}>
 
                 {/* Menu part */}
                 <div className="px-8 md:p-0 md:block md:w-1/4 h-full md:fixed left-8">
