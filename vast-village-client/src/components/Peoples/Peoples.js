@@ -27,7 +27,7 @@ const Peoples = () => {
         {
             path: "/peoples/friends",
             sidebar: () => "",
-            main: () => <Friends email={loggedInUser.email}/> || <NotFound />
+            main: () => <Friends email={loggedInUser.email} /> || <NotFound />
         },
         {
             path: "/peoples/friendrequests",
