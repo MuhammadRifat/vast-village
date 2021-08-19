@@ -106,6 +106,7 @@ const Main = ({ post }) => {
         setComment(e.target.value);
     }
 
+    // Handle share btn
     const handleShare = (id) => {
 
     }

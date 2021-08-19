@@ -42,7 +42,8 @@ const Header = () => {
     return (
         <div className="fixed top-0 w-full z-10">
             <div className={`grid grid-cols-1 py-3 md:grid-cols-2 sm:px-10 lg:px-36 ${darkMode ? "bg-gray-800" : "bg-gray-300"}`}>
-                {/* logo and search */}
+                
+                {/* logo and search box */}
                 <div className="flex justify-center align-items-center">
                     <div className="w-10 bg-white rounded-full">
                         <Link to="/"><img src={logo} alt="" /></Link>

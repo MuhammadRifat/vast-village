@@ -5,6 +5,7 @@ import { userContext } from '../../../../App';
 const Comments = ({ cmnt }) => {
     const [loggedInUser] = useContext(userContext);
     const { name, email, photo, comment, date } = cmnt;
+    
     return (
         <div className={`px-2 py-1 flex w-full ${loggedInUser.darkMode ? "text-white" : "text-gray-700"}`}>
             <Link to={`/profile/${email}`}>

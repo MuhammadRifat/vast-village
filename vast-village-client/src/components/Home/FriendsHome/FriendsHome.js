@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { userContext } from '../../../App';
 
+// Home left side (Friends)
 const FriendsHome = ({ friend, request, handleConfirmFriend, handleRemoveRequest }) => {
     const { email, name, photo } = friend;
     const [loggedInUser] = useContext(userContext);
@@ -9,6 +10,7 @@ const FriendsHome = ({ friend, request, handleConfirmFriend, handleRemoveRequest
 
     return (
         <div className={`py-2 px-3 border-b-2 rounded-md flex justify-between w-full ${darkMode ? "border-gray-700 bg-gray-800 text-gray-100" : "border-gray-300 bg-white text-gray-700"}`}>
+            
             {/* Photo and Name */}
             <Link to={`/profile/${email}`}>
                 <div className="flex items-center">

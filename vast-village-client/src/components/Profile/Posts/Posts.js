@@ -6,7 +6,7 @@ const Posts = ({email}) => {
     const [isLoading, setIsLoading] = useState(true);
     const [posts, setPosts] = useState([]);
 
-    // Load user all posts
+    // Load user's all posts
     useEffect(() => {
         setIsLoading(true);
         fetch('https://vast-village-server.herokuapp.com/getUserPosts', {

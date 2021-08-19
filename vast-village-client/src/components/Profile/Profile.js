@@ -76,11 +76,13 @@ const Profile = () => {
                                 <div className="text-center mt-2"><button className={`px-4 py-1 rounded-2xl ${darkMode ? "bg-gray-700" : "bg-gray-200"}`}>Add Friend</button></div>
                         }
 
+                        {/* Profile navigation like posts, about, friends */}
                         <div className={`mt-4 border-t-2 text-center ${darkMode ? "border-gray-700" : "border-gray-200"}`}>
                             <Link to={`/profile/${email}`}><button className={`${darkMode ? "hover:bg-gray-700" : "hover:bg-gray-200"} px-2 py-1`}>Posts</button></Link>
                             <Link to={`/profile/${email}/about`}><button className={`${darkMode ? "hover:bg-gray-700" : "hover:bg-gray-200"} px-2 py-1`}>About</button></Link>
                             <Link to={`/profile/${email}/friends`}><button className={`${darkMode ? "hover:bg-gray-700" : "hover:bg-gray-200"} px-2 py-1`}>Friends</button></Link>
                         </div>
+                        
                         <Switch>
                             {routes.map((route, index) => (
                                 <Route
