@@ -16,11 +16,20 @@ const Header = () => {
     const [dropdown, setDropdown] = useState(false);
     const [searchData, setSearchData] = useState([]);
     const [focus, setFocus] = useState(false);
+    const [unSeenNotifications, setUnSeenNotifications] = useState(0);
 
     // Get user data who logged in and check email from database.
     useEffect(() => {
         checkEmail(loggedInUser, setLoggedInUser);
     }, [])
+
+    useEffect(() => {
+        fetch(`https://vast-village-server.herokuapp.com/totalNotifications/${loggedInUser.email}`)
+        .then(res => res.json())
+        .then(data => {
+            setUnSeenNotifications(data);
+        })
+    }, [loggedInUser.email])
 
     // Handle logout button
     const handleLogout = () => {
@@ -39,10 +48,14 @@ const Header = () => {
             })
     }
 
+    const handleNotifications = () => {
+        history.push('/notifications');
+    }
+
     return (
         <div className="fixed top-0 w-full z-10">
             <div className={`grid grid-cols-1 py-3 md:grid-cols-2 sm:px-10 lg:px-36 ${darkMode ? "bg-gray-800" : "bg-gray-300"}`}>
-                
+
                 {/* logo and search box */}
                 <div className="flex justify-center align-items-center">
                     <div className="w-10 bg-white rounded-full">
@@ -64,7 +77,7 @@ const Header = () => {
                     <button onClick={() => history.push('/')} className="p-1 bg-gray-500 rounded-3xl w-10 h-10 text-white text-xl"><FontAwesomeIcon icon={faHome} /></button>
                     <button onClick={() => history.push('/chats')} className="ml-2 sm:ml-6 p-1 bg-gray-500 rounded-3xl w-10 h-10 text-white text-xl"><FontAwesomeIcon icon={faEnvelope} /></button>
                     <button onClick={() => history.push('/peoples')} className="ml-2 sm:ml-6 p-1 bg-gray-500 rounded-3xl w-10 h-10 text-white text-xl"><FontAwesomeIcon icon={faUserFriends} /></button>
-                    <button onClick={() => history.push('/notifications')} className="ml-2 sm:ml-6 p-1 bg-gray-500 rounded-3xl w-10 h-10 text-white text-xl"><FontAwesomeIcon icon={faBell} /></button>
+                    <button onClick={handleNotifications}  className="ml-2 sm:ml-6 p-1 bg-gray-500 rounded-3xl w-10 h-10 text-white text-xl"><FontAwesomeIcon icon={faBell} />{!!unSeenNotifications && <sup><small className="text-green-100 font-bold">{unSeenNotifications}</small></sup>}</button>
                     <div>
                         <button onClick={() => setDropdown(!dropdown)} className="ml-2 sm:ml-6 z-0 p-1 bg-gray-500 rounded-3xl w-10 h-10 text-white text-xl"><FontAwesomeIcon icon={faCaretDown} /></button>
                         {dropdown && <div className={`absolute w-32 mt-1 rounded-md shadow-lg grid grid-rows-2 ${darkMode ? "bg-gray-300" : "bg-white"}`}>
@@ -77,7 +90,7 @@ const Header = () => {
                     <button onClick={() => history.push(`/profile/${loggedInUser.email}`)} className="ml-2 sm:ml-6 bg-gray-200 rounded-full w-10"><img className="rounded-full w-10" src={loggedInUser.photo || profile} alt="" /></button>
                 </div >
             </div >
-        </div >
+        </div>
     );
 };
 

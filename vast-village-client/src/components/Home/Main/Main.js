@@ -87,11 +87,11 @@ const Main = ({ post }) => {
     const handleComment = (e, id, email) => {
         e.preventDefault();
         const newComment = comment.replaceAll("'", "''");
-        
+
         fetch('https://vast-village-server.herokuapp.com/addComment', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ post_id: id, email: email, comment: newComment, date: new Date() })
+            body: JSON.stringify({ post_id: id, email: email, receiver_email: authoremail, photo: loggedInUser.photo, name: loggedInUser.name, comment: newComment, date: new Date() })
         })
             .then(res => res.json())
             .then(data => {
@@ -125,8 +125,8 @@ const Main = ({ post }) => {
     }
 
     return (
-        <div className={`p-2 mx-1 my-4 rounded-md shadow-md ${darkMode ? "bg-gray-800 text-white" : "bg-white"}`}>
-            
+        <div className={`p-2 mx-1 my-4 rounded-md shadow-md ${darkMode ? "bg-gray-800 text-white" : "bg-white text-gray-700"}`}>
+
             {/* Post Header (user photo, post uploaded date)*/}
             <div className="flex justify-between">
                 <div className="flex">
@@ -138,9 +138,11 @@ const Main = ({ post }) => {
                         <small>{new Date(date).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</small>
                     </div>
                 </div>
-                <button>
-                    <FontAwesomeIcon icon={faEllipsisH} />
-                </button>
+                <div>
+                    <button className={`rounded-full px-2 py-1 ${darkMode ? "hover:bg-gray-700" : "hover:bg-gray-200"}`}>
+                        <FontAwesomeIcon icon={faEllipsisH} />
+                    </button>
+                </div>
             </div>
 
             {/* Post body */}
@@ -168,7 +170,7 @@ const Main = ({ post }) => {
                 <div className="w-8 mr-2">
                     <img className="rounded-full" src={loggedInUser.photo || image} alt="" />
                 </div>
-                <input onChange={handleChange} autocomplete="off" className={`w-4/5 focus:outline-none rounded-xl px-4 py-2 ${darkMode ? "bg-gray-700" : "bg-gray-200"}`} type="text" name={`comment${post_id}`} id={`comment${post_id}`} value={comment} placeholder="Write a comment" required/>
+                <input onChange={handleChange} autocomplete="off" className={`w-4/5 focus:outline-none rounded-xl px-4 py-2 ${darkMode ? "bg-gray-700" : "bg-gray-200"}`} type="text" name={`comment${post_id}`} id={`comment${post_id}`} value={comment} placeholder="Write a comment" required />
                 <button type="submit" className={`${darkMode ? "bg-gray-700" : "bg-gray-200"} p-1 rounded-xl ml-2 px-3 font-bold py-2`}>Add</button>
             </form>
 

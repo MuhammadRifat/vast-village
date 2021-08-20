@@ -38,7 +38,7 @@ const FriendList = ({ dots, friend, handleFriendRemove, myFriends }) => {
                 }
                 {/* three dots */}
                 {dots && <div className="relative">
-                    <button onClick={() => setDropdown(!dropdown)}><FontAwesomeIcon icon={faEllipsisH} /></button>
+                    <button className={`rounded-full px-2 py-1 ${darkMode ? "hover:bg-gray-700" : "hover:bg-gray-200"}`} onClick={() => setDropdown(!dropdown)}><FontAwesomeIcon icon={faEllipsisH} /></button>
                     {dropdown && <div className={`absolute w-24 mt-1 rounded-md shadow-lg grid grid-rows-1 ${darkMode ? "bg-gray-700" : "bg-gray-300"}`}>
                         <button onClick={() => handleFriendRemove(email, id)} className=" p-1 rounded-t-md"><FontAwesomeIcon icon={faTrashAlt} /> Remove</button>
                     </div>}

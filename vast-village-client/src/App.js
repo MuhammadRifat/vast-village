@@ -9,9 +9,11 @@ import Chats from "./components/Chats/Chats";
 import Home from "./components/Home/Home";
 import Login from "./components/Login/Login";
 import NotFound from "./components/NotFound/NotFound";
+import Notification from "./components/Notification/Notification";
 import Peoples from "./components/Peoples/Peoples";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 import Profile from "./components/Profile/Profile";
+import IndividualPost from "./pages/IndividualPost/IndividualPost";
 
 export const userContext = createContext();
 
@@ -39,7 +41,7 @@ function App() {
     localStorage.setItem("darkMode", JSON.stringify(loggedInUser.darkMode));
   }, [loggedInUser.darkMode]);
 
-  // Load data from localStorage
+  // Load darkMode data from localStorage
   function getMode() {
     const savedMode = JSON.parse(localStorage.getItem("darkMode"));
     return savedMode || false;
@@ -74,7 +76,10 @@ function App() {
             <Peoples />
           </PrivateRoute>
           <PrivateRoute path="/notifications">
-            <Home />
+            <Notification />
+          </PrivateRoute>
+          <PrivateRoute path="/post/:post_id">
+            <IndividualPost />
           </PrivateRoute>
           <Route path="*">
             <NotFound />

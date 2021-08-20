@@ -73,7 +73,7 @@ const Home = () => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ toEmail: loggedInUser.email, fromEmail: email, date: new Date() })
+            body: JSON.stringify({ toEmail: loggedInUser.email, fromEmail: email, photo: loggedInUser.photo, name: loggedInUser.name, date: new Date() })
         })
             .then(res => res.json())
             .then(data => {
