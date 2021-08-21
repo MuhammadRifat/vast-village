@@ -1,23 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import image from '../../../images/avater.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEllipsisH, faThumbsUp, faCommentAlt, faShare } from '@fortawesome/free-solid-svg-icons'
+import { faEllipsisH, faThumbsUp, faCommentAlt, faShare, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { userContext } from '../../../App';
 import { Link } from 'react-router-dom';
-import Modal from 'react-modal';
 import Comments from './Comments/Comments';
-
-const customStyles = {
-    content: {
-        top: '30%',
-        left: '50%',
-        right: 'auto',
-        bottom: 'auto',
-        marginRight: '-50%',
-        transform: 'translate(-50%, -50%)',
-        boxShadow: '1px 1px 10px gray',
-    },
-};
+import Toast from '../../ConfirmationPopUp/Toast/Toast';
 
 const Main = ({ post }) => {
     const [loggedInUser] = useContext(userContext);
@@ -29,8 +17,8 @@ const Main = ({ post }) => {
     const [isComments, setIsComments] = useState(false);
     const [postLength, setPostLength] = useState(140);
     const { post_id, author, authorphoto, authoremail, postbody, date, shares } = post;
-    const [modalIsOpen, setIsOpen] = useState(false);
-    let subtitle;
+    const [isOpen, setIsOpen] = useState(false);
+    const [isToast, setIsToast] = useState(false);
 
     // check is like any post
     useEffect(() => {
@@ -45,20 +33,21 @@ const Main = ({ post }) => {
             })
     }, [loggedInUser.email, post_id])
 
-    // Load all likes from the database
     useEffect(() => {
+        // Load all likes from the database
+        loadLikesAndComments('likes', setLikes);
 
-        fetch(`https://vast-village-server.herokuapp.com/likes/${post_id}`)
-            .then(res => res.json())
-            .then(data => setLikes(data))
+        // Load all comments from the database
+        loadLikesAndComments('comments', setComments)
+
     }, [post_id])
 
-    // Load all comments from the database
-    useEffect(() => {
-        fetch(`https://vast-village-server.herokuapp.com/comments/${post_id}`)
+    // loader function
+    const loadLikesAndComments = (route, stateFunction) => {
+        fetch(`https://vast-village-server.herokuapp.com/${route}/${post_id}`)
             .then(res => res.json())
-            .then(data => setComments(data))
-    }, [post_id, comment])
+            .then(data => stateFunction(data))
+    }
 
     // Handle like
     const handleLike = (id, email) => {
@@ -88,15 +77,19 @@ const Main = ({ post }) => {
         e.preventDefault();
         const newComment = comment.replaceAll("'", "''");
 
+        const commentData = { post_id: id, email: email, receiver_email: authoremail, photo: loggedInUser.photo, name: loggedInUser.name, comment: newComment, date: new Date() };
+        setComments([...comments, { ...commentData, id: comments.length + 1 }]);
+        setComment("");
+
         fetch('https://vast-village-server.herokuapp.com/addComment', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ post_id: id, email: email, receiver_email: authoremail, photo: loggedInUser.photo, name: loggedInUser.name, comment: newComment, date: new Date() })
+            body: JSON.stringify(commentData)
         })
             .then(res => res.json())
             .then(data => {
                 if (data) {
-                    setComment("");
+                    setIsToast(true);
                 }
             })
     }
@@ -109,19 +102,6 @@ const Main = ({ post }) => {
     // Handle share btn
     const handleShare = (id) => {
 
-    }
-
-    function openModal() {
-        setIsOpen(true);
-    }
-
-    function afterOpenModal() {
-        // references are now sync'd and can be accessed.
-        subtitle.style.color = 'gray';
-    }
-
-    function closeModal() {
-        setIsOpen(false);
     }
 
     return (
@@ -153,7 +133,7 @@ const Main = ({ post }) => {
 
             {/* Display all likes, comments, shares */}
             <div className={`flex justify-between text-sm mt-3 ${darkMode ? "text-gray-300" : "text-gray-500"}`}>
-                <button onClick={likes.length ? openModal : ""} className="hover:underline hover:text-blue-700">{likes.length} Likes</button>
+                <button onClick={likes.length ? () => setIsOpen(true) : ""} className="hover:underline hover:text-blue-700">{likes.length} Likes</button>
                 <button onClick={comments.length && (() => setIsComments(!isComments))} className="hover:underline hover:text-blue-700">{comments.length} Comments</button>
                 <span>{shares} Shares</span>
             </div>
@@ -182,33 +162,41 @@ const Main = ({ post }) => {
                 }
             </div>
 
-            <Modal
-                isOpen={modalIsOpen}
-                onAfterOpen={afterOpenModal}
-                onRequestClose={closeModal}
-                style={customStyles}
-                contentLabel="Example Modal"
-            >
-                <div className="flex justify-between items-center border-b-2 pb-1">
-                    <h2 className="font-bold text-xl text-gray-600" ref={(_subtitle) => (subtitle = _subtitle)}>Likes ({likes.length})</h2>
-                    <button onClick={closeModal} className="text-gray-600 text-xl">X</button>
-                </div>
+            {/* Modal */}
+            {isOpen && <div className="fixed bottom-50 z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+                <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
 
-                {
-                    likes.map(like => {
-                        return (
-                            <Link to={`/profile/${like.email}`}>
-                                <div className="w-80 flex items-center p-2">
-                                    <div className="w-8 rounded-full mr-2">
-                                        <img className="rounded-full" src={like.photo} alt="" />
-                                    </div>
-                                    <h3 className="font-bold text-gray-600">{like.name}</h3>
-                                </div>
-                            </Link>
-                        )
-                    })
-                }
-            </Modal>
+                    <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+
+                    <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+
+                    <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                        <div className="bg-white px-3 py-3 sm:p-4 sm:pb-4">
+                            <div className="flex justify-between items-center border-b-2 pb-1">
+                                <h2 className="font-bold text-xl text-gray-600">Likes ({likes.length})</h2>
+                                <button onClick={() => setIsOpen(false)} className="text-xl"><FontAwesomeIcon icon={faTimes} /></button>
+                            </div>
+                            {
+                                likes.map(like => {
+                                    return (
+                                        <Link to={`/profile/${like.email}`}>
+                                            <div className="w-80 flex items-center p-2">
+                                                <div className="w-10 rounded-full mr-2">
+                                                    <img className="rounded-full" src={like.photo} alt="" />
+                                                </div>
+                                                <h3 className="font-bold text-gray-600">{like.name}</h3>
+                                            </div>
+                                        </Link>
+                                    )
+                                })
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>}
+
+            {isToast && <Toast message="Comment Added" setIsToast={setIsToast} />}
         </div>
     );
 };

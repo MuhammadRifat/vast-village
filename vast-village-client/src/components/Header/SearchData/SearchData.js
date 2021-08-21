@@ -11,7 +11,7 @@ const SearchData = ({ friend }) => {
             <div className={`py-2 px-4 border-b-2 flex justify-between items-center ${loggedInUser.darkMode ? "border-gray-600  text-gray-100" : "border-gray-300  text-gray-700"}`}>
 
                 <div className="flex items-center">
-                    <img className="w-16 rounded-full" src={photo} alt="" />
+                    <img className="w-12 rounded-full" src={photo} alt="" />
                     <h3 className={`font-bold text-md ml-3`}>{name}</h3>
                 </div>
             </div>

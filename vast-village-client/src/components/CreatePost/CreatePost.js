@@ -1,42 +1,17 @@
 import React, { useContext, useState } from 'react';
 import image from '../../images/avater.png';
-import Modal from 'react-modal';
 import { userContext } from '../../App';
 import Loader from '../Loader/Loader';
-
-const customStyles = {
-    content: {
-        top: '40%',
-        left: '50%',
-        right: 'auto',
-        bottom: 'auto',
-        marginRight: '-50%',
-        transform: 'translate(-50%, -50%)',
-        boxShadow: '1px 1px 10px gray',
-    },
-};
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTimes } from '@fortawesome/free-solid-svg-icons'
 
 const CreatePost = () => {
-    let subtitle;
     const [loggedInUser] = useContext(userContext);
     const { darkMode } = loggedInUser;
-    const [modalIsOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
     const [post, setPost] = useState('');
     const [isSuccess, setIsSuccess] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-
-    function openModal() {
-        setIsOpen(true);
-    }
-
-    function afterOpenModal() {
-        // references are now sync'd and can be accessed.
-        subtitle.style.color = 'gray';
-    }
-
-    function closeModal() {
-        setIsOpen(false);
-    }
 
     const handleBlur = (e) => {
         setPost(e.target.value);
@@ -91,34 +66,43 @@ const CreatePost = () => {
                     <div className="w-10 rounded-full mr-2">
                         <img className="rounded-full" src={loggedInUser.photo || image} alt="" />
                     </div>
-                    <input onClick={openModal} type="text" className={`p-3 w-full rounded-2xl focus:outline-none cursor-pointer font-bold text-transparent ${darkMode ? "bg-gray-700" : "bg-gray-200"}`} name="createPost" id="createPost" placeholder="Write a post" />
+                    <input onClick={() => setIsOpen(true)} type="text" className={`p-3 w-full rounded-2xl focus:outline-none cursor-pointer font-bold text-transparent ${darkMode ? "bg-gray-700" : "bg-gray-200"}`} name="createPost" id="createPost" placeholder="Write a post" />
                 </div>
-                <Modal
-                    isOpen={modalIsOpen}
-                    onAfterOpen={afterOpenModal}
-                    onRequestClose={closeModal}
-                    style={customStyles}
-                    contentLabel="Example Modal"
-                >
-                    <div className="flex justify-between items-center border-b-2 pb-1">
-                        <h2 className="font-bold text-xl text-gray-600" ref={(_subtitle) => (subtitle = _subtitle)}>Create a post</h2>
-                        <button onClick={closeModal} className="text-red-500">Cancel</button>
-                    </div>
 
-                    <div className="my-3 flex items-center">
-                        <div className="w-10 rounded-full mr-2">
-                            <img className="rounded-full" src={loggedInUser.photo || image} alt="" />
-                        </div>
-                        <h3 className="font-bold text-gray-600">{loggedInUser.name}</h3>
-                    </div>
-                    <form onSubmit={handleNewPost}>
-                        <textarea autoFocus onBlur={handleBlur} className="focus:outline-none" cols="60" rows="5" placeholder="Write text here.." required></textarea>
+                {/* Modal */}
+                {isOpen && <div className="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+                    <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
 
-                        <div className="flex justify-end mt-3">
-                            <button type="submit" className="font-bold rounded-xl bg-gray-500 text-white px-3 py-1">Post</button>
+                        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+
+                        <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+
+                        <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-full">
+                            <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                                <div className="flex justify-between items-center border-b-2 pb-1">
+                                    <h2 className="font-bold text-xl text-gray-600">Create a post</h2>
+                                    <button onClick={() => setIsOpen(false)} className="text-xl"><FontAwesomeIcon icon={faTimes} /></button>
+                                </div>
+
+                                <div className="my-3 flex items-center">
+                                    <div className="w-10 rounded-full mr-2">
+                                        <img className="rounded-full" src={loggedInUser.photo || image} alt="" />
+                                    </div>
+                                    <h3 className="font-bold text-gray-600">{loggedInUser.name}</h3>
+                                </div>
+                                <form onSubmit={handleNewPost}>
+                                    <textarea autoFocus onBlur={handleBlur} className="focus:outline-none w-full" rows="5" placeholder="Write text here.." required></textarea>
+
+                                    <div className="flex justify-end mt-3 mr-3">
+                                        <button type="submit" className="font-bold rounded-xl bg-gray-500 text-white px-3 py-1">Post</button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
-                    </form>
-                </Modal>
+                    </div>
+                </div>}
+
             </div>
         </div>
     );

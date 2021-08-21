@@ -4,6 +4,7 @@ import { faAt, faBriefcase, faGlobe, faGraduationCap, faHeart, faMapMarkerAlt } 
 import { userContext } from '../../../App';
 import { faEdit } from '@fortawesome/free-regular-svg-icons';
 import AboutSkeleton from '../../Loader/AboutSkeleton/AboutSkeleton';
+import Toast from '../../ConfirmationPopUp/Toast/Toast';
 
 const About = ({ email }) => {
     const [loggedInUser] = useContext(userContext);
@@ -26,6 +27,7 @@ const About = ({ email }) => {
         about: ''
     });
     const [isLoading, setIsLoading] = useState(true);
+    const [isToast, setIsToast] = useState(false);
 
     // Load user's data from the database
     useEffect(() => {
@@ -54,6 +56,10 @@ const About = ({ email }) => {
         const newAbout = {...aboutData};
         newAbout[name] = userData.value;
         setAboutData(newAbout);
+
+        const newData = { ...isDisplay };
+        newData[name] = true;
+        setIsDisplay(newData);
         
         // upload user's data into the database
         fetch('https://vast-village-server.herokuapp.com/addUserDetails', {
@@ -64,9 +70,7 @@ const About = ({ email }) => {
             .then(res => res.json())
             .then(data => {
                 if (data) {
-                    const newData = { ...isDisplay };
-                    newData[name] = true;
-                    setIsDisplay(newData);
+                    setIsToast(true);
                 }
             })
     }
@@ -92,7 +96,7 @@ const About = ({ email }) => {
                         :
                         <>
                             <div className="mb-1 mt-4">
-                                <input onBlur={handleBlur} name="workplace" type="text" className={`w-full px-3 py-2 focus:outline-none rounded-xl ${darkMode ? "bg-gray-700" : "bg-gray-200"}`} defaultValue={aboutData?.workplace} placeholder="Add workplace" required />
+                                <input onBlur={handleBlur} name="workplace" type="text" className={`w-full px-3 py-2 focus:outline-none rounded-xl ${darkMode ? "bg-gray-700" : "bg-gray-200"}`} defaultValue={aboutData?.workplace} placeholder="Add workplace"  />
                             </div>
                             {email === loggedInUser.email && <button name="workplace" onClick={handleEdit} className="mr-1 text-blue-500 border-blue-500 border-2 px-2 rounded-xl">Save</button>}
                             {email === loggedInUser.email && <button onClick={() => setIsDisplay({ ...isDisplay, workplace: true })} className="text-blue-500 hover:underline">Cancel</button>}
@@ -113,7 +117,7 @@ const About = ({ email }) => {
                         :
                         <>
                             <div className="mb-1 mt-4">
-                                <input onBlur={handleBlur} name="education" type="text" className={`w-full px-3 py-2 focus:outline-none rounded-xl ${darkMode ? "bg-gray-700" : "bg-gray-200"}`} defaultValue={aboutData?.education} placeholder="Add institute" required />
+                                <input onBlur={handleBlur} name="education" type="text" className={`w-full px-3 py-2 focus:outline-none rounded-xl ${darkMode ? "bg-gray-700" : "bg-gray-200"}`} defaultValue={aboutData?.education} placeholder="Add institute"  />
                             </div>
                             {email === loggedInUser.email && <button name="education" onClick={handleEdit} className="mr-1 text-blue-500 border-blue-500 border-2 px-2 rounded-xl">Save</button>}
                             {email === loggedInUser.email && <button onClick={() => setIsDisplay({ ...isDisplay, education: true })} className="text-blue-500 hover:underline">Cancel</button>}
@@ -134,7 +138,7 @@ const About = ({ email }) => {
                         :
                         <>
                             <div className="mb-1 mt-4">
-                                <input onBlur={handleBlur} name="address" type="text" className={`w-full px-3 py-2 focus:outline-none rounded-xl ${darkMode ? "bg-gray-700" : "bg-gray-200"}`} defaultValue={aboutData?.address} placeholder="Add address" required />
+                                <input onBlur={handleBlur} name="address" type="text" className={`w-full px-3 py-2 focus:outline-none rounded-xl ${darkMode ? "bg-gray-700" : "bg-gray-200"}`} defaultValue={aboutData?.address} placeholder="Add address"  />
                             </div>
                             {email === loggedInUser.email && <button name="address" onClick={handleEdit} className="mr-1 text-blue-500 border-blue-500 border-2 px-2 rounded-xl">Save</button>}
                             {email === loggedInUser.email && <button onClick={() => setIsDisplay({ ...isDisplay, address: true })} className="text-blue-500 hover:underline">Cancel</button>}
@@ -163,7 +167,7 @@ const About = ({ email }) => {
                         :
                         <>
                             <div className="mb-1 mt-4">
-                                <input onBlur={handleBlur} name="website" type="text" className={`w-full px-3 py-2 focus:outline-none rounded-xl ${darkMode ? "bg-gray-700" : "bg-gray-200"}`} defaultValue={aboutData?.website} placeholder="Add website link" required />
+                                <input onBlur={handleBlur} name="website" type="text" className={`w-full px-3 py-2 focus:outline-none rounded-xl ${darkMode ? "bg-gray-700" : "bg-gray-200"}`} defaultValue={aboutData?.website} placeholder="Add website link"  />
                             </div>
                             {email === loggedInUser.email && <button name="website" onClick={handleEdit} className="mr-1 text-blue-500 border-blue-500 border-2 px-2 rounded-xl">Save</button>}
                             {email === loggedInUser.email && <button onClick={() => setIsDisplay({ ...isDisplay, website: true })} className="text-blue-500 hover:underline">Cancel</button>}
@@ -184,7 +188,7 @@ const About = ({ email }) => {
                         :
                         <>
                             <div className="mb-1 mt-4">
-                                <input onBlur={handleBlur} name="marital_status" type="text" className={`w-full px-3 py-2 focus:outline-none rounded-xl ${darkMode ? "bg-gray-700" : "bg-gray-200"}`} defaultValue={aboutData?.marital_status} placeholder="Add marital status" required />
+                                <input onBlur={handleBlur} name="marital_status" type="text" className={`w-full px-3 py-2 focus:outline-none rounded-xl ${darkMode ? "bg-gray-700" : "bg-gray-200"}`} defaultValue={aboutData?.marital_status} placeholder="Add marital status"  />
                             </div>
                             {email === loggedInUser.email && <button name="marital_status" onClick={handleEdit} className="mr-1 text-blue-500 border-blue-500 border-2 px-2 rounded-xl">Save</button>}
                             {email === loggedInUser.email && <button onClick={() => setIsDisplay({ ...isDisplay, marital_status: true })} className="text-blue-500 hover:underline">Cancel</button>}
@@ -207,13 +211,15 @@ const About = ({ email }) => {
                     :
                     <form onSubmit={handleEdit}>
                         <div className="mb-1 mt-4">
-                            <textarea type="text" name="about" onBlur={handleBlur} rows="3" className={`w-full px-3 py-2 focus:outline-none rounded-xl ${darkMode ? "bg-gray-700" : "bg-gray-200"}`} defaultValue={aboutData?.about} placeholder="Write about yourself" required />
+                            <textarea type="text" name="about" onBlur={handleBlur} rows="3" className={`w-full px-3 py-2 focus:outline-none rounded-xl ${darkMode ? "bg-gray-700" : "bg-gray-200"}`} defaultValue={aboutData?.about} placeholder="Write about yourself"  />
                         </div>
                         {email === loggedInUser.email && <button onClick={handleEdit} name="about" className="mr-1 text-blue-500 border-blue-500 border-2 px-2 rounded-xl">Save</button>}
                         {email === loggedInUser.email && <button onClick={() => setIsDisplay({ ...isDisplay, about: true })} className="text-blue-500 hover:underline">Cancel</button>}
                     </form>
                 }
             </div>
+
+            {isToast && <Toast message="Successfully Edited" setIsToast={setIsToast} />}
         </>
     );
 };

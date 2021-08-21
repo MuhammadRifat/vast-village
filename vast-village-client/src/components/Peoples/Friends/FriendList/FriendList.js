@@ -12,7 +12,7 @@ const FriendList = ({ dots, friend, handleFriendRemove, myFriends }) => {
     let isFriend = true;
 
     if (myFriends.length > 0) {
-        isFriend = !!(myFriends.find( fd => fd.id === friend.id));
+        isFriend = !!(myFriends.find(fd => fd.id === friend.id));
     }
 
     useEffect(() => {
@@ -37,11 +37,8 @@ const FriendList = ({ dots, friend, handleFriendRemove, myFriends }) => {
                     <button className={`px-4 py-1 rounded-2xl bg-transparent border-2 mr-3 ${darkMode ? "border-gray-600 hover:bg-gray-700" : "border-gray-300 hover:bg-gray-300"}`}>Add Friend</button>
                 }
                 {/* three dots */}
-                {dots && <div className="relative">
-                    <button className={`rounded-full px-2 py-1 ${darkMode ? "hover:bg-gray-700" : "hover:bg-gray-200"}`} onClick={() => setDropdown(!dropdown)}><FontAwesomeIcon icon={faEllipsisH} /></button>
-                    {dropdown && <div className={`absolute w-24 mt-1 rounded-md shadow-lg grid grid-rows-1 ${darkMode ? "bg-gray-700" : "bg-gray-300"}`}>
-                        <button onClick={() => handleFriendRemove(email, id)} className=" p-1 rounded-t-md"><FontAwesomeIcon icon={faTrashAlt} /> Remove</button>
-                    </div>}
+                {dots && <div>
+                    <button onClick={() => handleFriendRemove(email, id)} className={`rounded-full px-2 py-1 ${darkMode ? "hover:bg-gray-700" : "hover:bg-gray-200"}`}><FontAwesomeIcon icon={faTrashAlt} /></button>
                 </div>}
             </div>
         </div>

@@ -7,6 +7,7 @@ import { userContext } from '../../App';
 import FriendsHome from './FriendsHome/FriendsHome';
 import PostSkeleton from '../Loader/PostSkeleton/PostSkeleton';
 import FriendsSkeleton from '../Loader/FriendsSkeleton/FriendsSkeleton';
+import Toast from '../ConfirmationPopUp/Toast/Toast';
 
 const Home = () => {
     const [posts, setPosts] = useState([]);
@@ -15,11 +16,23 @@ const Home = () => {
     const { darkMode } = loggedInUser;
     const [isLoading, setIsLoading] = useState(true);
     const [requests, setRequests] = useState([]);
+    const [isToast, setIsToast] = useState(false);
 
-    // Load all friends posts
+    // Load data from database
     useEffect(() => {
-        setIsLoading(true);
-        fetch('https://vast-village-server.herokuapp.com/posts', {
+        // Load all friends posts
+        loadData('posts', setPosts);
+
+        // Load all friend requests
+        loadData('friendRequests', setRequests);
+
+        // Load all friends
+        loadData('friends', setFriends);
+    }, [loggedInUser.email])
+
+    // loader function
+    const loadData = (route, stateFunction) => {
+        fetch(`https://vast-village-server.herokuapp.com/${route}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -28,46 +41,16 @@ const Home = () => {
         })
             .then(res => res.json())
             .then(data => {
-                setPosts(data);
+                stateFunction(data);
                 setIsLoading(false);
             })
-    }, [loggedInUser.email])
-
-    // Load all friend requests
-    useEffect(() => {
-        setIsLoading(true);
-        fetch('https://vast-village-server.herokuapp.com/friendRequests', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: loggedInUser.email })
-        })
-            .then(res => res.json())
-            .then(data => {
-                setRequests(data);
-                setIsLoading(false);
-            })
-    }, [loggedInUser.email])
-
-    // Load all friends
-    useEffect(() => {
-        setIsLoading(true);
-        fetch('https://vast-village-server.herokuapp.com/friends', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ email: loggedInUser.email })
-        })
-            .then(res => res.json())
-            .then(data => {
-                setFriends(data);
-                setIsLoading(false);
-            })
-    }, [loggedInUser.email])
-
+    }
 
     // Handle confirm button
     const handleConfirmFriend = (email) => {
+        const newUsers = requests.filter(user => user.email !== email);
+        setRequests(newUsers);
+
         fetch('https://vast-village-server.herokuapp.com/confirmFriend', {
             method: 'POST',
             headers: {
@@ -78,8 +61,7 @@ const Home = () => {
             .then(res => res.json())
             .then(data => {
                 if (data) {
-                    const newUsers = requests.filter(user => user.email !== email);
-                    setRequests(newUsers);
+                    setIsToast(true);
                 }
             })
     }
@@ -130,8 +112,8 @@ const Home = () => {
                     {
                         posts?.map(post => <Main post={post} key={post.post_id}></Main>)
                     }
-                    
-                    {!isLoading && !posts.length && <div className="text-red-900 text-center">No posts found.</div>}
+
+                    {!isLoading && !posts.length && <div className="text-red-600 text-center">No posts found.</div>}
                 </div>
 
                 {/* Messaging part */}
@@ -144,6 +126,8 @@ const Home = () => {
                     </div>
                 </div>
             </div>
+
+            {isToast && <Toast message="Successfully Confirmed" setIsToast={setIsToast} />}
         </>
     );
 };

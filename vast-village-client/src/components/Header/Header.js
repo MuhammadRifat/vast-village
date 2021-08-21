@@ -17,6 +17,7 @@ const Header = () => {
     const [searchData, setSearchData] = useState([]);
     const [focus, setFocus] = useState(false);
     const [unSeenNotifications, setUnSeenNotifications] = useState(0);
+    const [unSeenFriendRequests, setUnSeenFriendRequests] = useState(0);
 
     // Get user data who logged in and check email from database.
     useEffect(() => {
@@ -24,14 +25,22 @@ const Header = () => {
     }, [])
 
     useEffect(() => {
-        if (unSeenNotifications === 0) {
-            fetch(`https://vast-village-server.herokuapp.com/totalNotifications/${loggedInUser.email}`)
+        //find total notifications from database
+        loadCount('totalNotifications', unSeenNotifications, setUnSeenNotifications)
+        
+        //find total friend requests from database
+        loadCount('totalFriendRequests', unSeenFriendRequests, setUnSeenFriendRequests);
+    }, [loggedInUser.email])
+
+    const loadCount = (route, state, stateFunction) => {
+        if (state === 0) {
+            fetch(`https://vast-village-server.herokuapp.com/${route}/${loggedInUser.email}`)
                 .then(res => res.json())
                 .then(data => {
-                    setUnSeenNotifications(data);
+                    stateFunction(data);
                 })
         }
-    }, [loggedInUser.email])
+    }
 
     // Handle logout button
     const handleLogout = () => {
@@ -50,8 +59,16 @@ const Header = () => {
             })
     }
 
+    // Handle navbar peoples
+    const handlePeoples = () => {
+        history.push('/peoples');
+        setUnSeenFriendRequests(0);
+    }
+
+    // Handle navbar notifications
     const handleNotifications = () => {
         history.push('/notifications');
+        setUnSeenNotifications(0);
     }
 
     return (
@@ -64,10 +81,10 @@ const Header = () => {
                         <Link to="/"><img src={logo} alt="" /></Link>
                     </div>
                     <div className="relative w-3/4">
-                        <input type="text" name="search" id="search" onChange={handleSearch} onClick={() => setFocus(!focus)} autocomplete="off" className={`px-3 py-2 mx-5 w-full rounded-md focus:outline-none ${darkMode ? "bg-gray-600 text-white" : "bg-gray-50 text-black"}`} placeholder="Search" />
+                        <input type="text" name="search" id="search" onChange={handleSearch} onClick={() => setFocus(!focus)} autocomplete="off" className={`px-3 py-2 mx-3 sm:mx-5 w-full rounded-md focus:outline-none ${darkMode ? "bg-gray-600 text-white" : "bg-gray-50 text-black"}`} placeholder="Search" />
                         {
                             focus &&
-                            <div className={`${darkMode ? "bg-gray-700" : "bg-white shadow-2xl"} absolute rounded-t-lg w-full left-5 mt-2`}>
+                            <div className={`${darkMode ? "bg-gray-700" : "bg-white shadow-2xl"} absolute z-10 rounded-t-lg w-full left-3 sm:left-5 mt-1`}>
                                 {searchData?.map(data => <SearchData friend={data} key={data.id} />)}
                             </div>
                         }
@@ -78,8 +95,8 @@ const Header = () => {
                 <div className="flex justify-center align-items-center mt-3 md:mt-0" onClick={() => setFocus(false)}>
                     <button onClick={() => history.push('/')} className="p-1 bg-gray-500 rounded-3xl w-10 h-10 text-white text-xl"><FontAwesomeIcon icon={faHome} /></button>
                     <button onClick={() => history.push('/chats')} className="ml-2 sm:ml-6 p-1 bg-gray-500 rounded-3xl w-10 h-10 text-white text-xl"><FontAwesomeIcon icon={faEnvelope} /></button>
-                    <button onClick={() => history.push('/peoples')} className="ml-2 sm:ml-6 p-1 bg-gray-500 rounded-3xl w-10 h-10 text-white text-xl"><FontAwesomeIcon icon={faUserFriends} /></button>
-                    <button onClick={handleNotifications} className="ml-2 sm:ml-6 p-1 bg-gray-500 rounded-3xl w-10 h-10 text-white text-xl relative"><FontAwesomeIcon icon={faBell} />{!!unSeenNotifications && <span className="block absolute top-0 right-0 rounded-full w-auto h-auto px-1 bg-red-500 text-center text-sm font-bold">{unSeenNotifications}</span>}</button>
+                    <button onClick={handlePeoples} className="ml-2 sm:ml-6 p-1 bg-gray-500 rounded-3xl w-10 h-10 text-white text-xl relative"><FontAwesomeIcon icon={faUserFriends} />{!!unSeenFriendRequests && <span className="block absolute top-0 right-0 rounded-full w-auto h-auto px-1 bg-red-500 text-center text-sm font-bold">{unSeenFriendRequests}</span>}</button>
+                    <button onClick={handleNotifications} className="block ml-2 sm:ml-6 p-1 bg-gray-500 rounded-3xl w-10 h-10 text-white text-xl relative"><FontAwesomeIcon icon={faBell} />{!!unSeenNotifications && <span className="block absolute top-0 right-0 rounded-full w-auto h-auto px-1 bg-red-500 text-center text-sm font-bold">{unSeenNotifications}</span>}</button>
                     <div>
                         <button onClick={() => setDropdown(!dropdown)} className="ml-2 sm:ml-6 z-0 p-1 bg-gray-500 rounded-3xl w-10 h-10 text-white text-xl"><FontAwesomeIcon icon={faCaretDown} /></button>
                         {dropdown && <div className={`absolute w-32 mt-1 rounded-md shadow-lg grid grid-rows-2 ${darkMode ? "bg-gray-300" : "bg-white"}`}>

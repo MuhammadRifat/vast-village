@@ -36,11 +36,13 @@ const Notification = () => {
     }, [loggedInUser.email]);
 
 
+    // handle delete notification
     const handleDeleteNotification = (id) => {
         setIsDisplay(true);
         setId(id);
     }
 
+    // conformation message
     const handleConfirmation = () => {
         deleteNotification();
         setIsDisplay(false);
