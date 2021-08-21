@@ -24,11 +24,13 @@ const Header = () => {
     }, [])
 
     useEffect(() => {
-        fetch(`https://vast-village-server.herokuapp.com/totalNotifications/${loggedInUser.email}`)
-        .then(res => res.json())
-        .then(data => {
-            setUnSeenNotifications(data);
-        })
+        if (unSeenNotifications === 0) {
+            fetch(`https://vast-village-server.herokuapp.com/totalNotifications/${loggedInUser.email}`)
+                .then(res => res.json())
+                .then(data => {
+                    setUnSeenNotifications(data);
+                })
+        }
     }, [loggedInUser.email])
 
     // Handle logout button
@@ -77,7 +79,7 @@ const Header = () => {
                     <button onClick={() => history.push('/')} className="p-1 bg-gray-500 rounded-3xl w-10 h-10 text-white text-xl"><FontAwesomeIcon icon={faHome} /></button>
                     <button onClick={() => history.push('/chats')} className="ml-2 sm:ml-6 p-1 bg-gray-500 rounded-3xl w-10 h-10 text-white text-xl"><FontAwesomeIcon icon={faEnvelope} /></button>
                     <button onClick={() => history.push('/peoples')} className="ml-2 sm:ml-6 p-1 bg-gray-500 rounded-3xl w-10 h-10 text-white text-xl"><FontAwesomeIcon icon={faUserFriends} /></button>
-                    <button onClick={handleNotifications}  className="ml-2 sm:ml-6 p-1 bg-gray-500 rounded-3xl w-10 h-10 text-white text-xl"><FontAwesomeIcon icon={faBell} />{!!unSeenNotifications && <sup><small className="text-green-100 font-bold">{unSeenNotifications}</small></sup>}</button>
+                    <button onClick={handleNotifications} className="ml-2 sm:ml-6 p-1 bg-gray-500 rounded-3xl w-10 h-10 text-white text-xl relative"><FontAwesomeIcon icon={faBell} />{!!unSeenNotifications && <span className="block absolute top-0 right-0 rounded-full w-auto h-auto px-1 bg-red-500 text-center text-sm font-bold">{unSeenNotifications}</span>}</button>
                     <div>
                         <button onClick={() => setDropdown(!dropdown)} className="ml-2 sm:ml-6 z-0 p-1 bg-gray-500 rounded-3xl w-10 h-10 text-white text-xl"><FontAwesomeIcon icon={faCaretDown} /></button>
                         {dropdown && <div className={`absolute w-32 mt-1 rounded-md shadow-lg grid grid-rows-2 ${darkMode ? "bg-gray-300" : "bg-white"}`}>

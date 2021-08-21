@@ -1,5 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { userContext } from '../../App';
+import ConfirmationPopUp from '../ConfirmationPopUp/ConfirmationPopUp';
+import Toast from '../ConfirmationPopUp/Toast/Toast';
 import Header from '../Header/Header';
 import FriendsSkeleton from '../Loader/FriendsSkeleton/FriendsSkeleton';
 import NotificationList from './NotificationList/NotificationList';
@@ -9,6 +11,9 @@ const Notification = () => {
     const { darkMode } = loggedInUser;
     const [notifications, setNotifications] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [id, setId] = useState(0);
+    const [isDisplay, setIsDisplay] = useState(false);
+    const [isToast, setIsToast] = useState(false);
 
     // Load all notifications from the database
     useEffect(() => {
@@ -30,8 +35,19 @@ const Notification = () => {
             })
     }, [loggedInUser.email]);
 
-    // Delete notification
+
     const handleDeleteNotification = (id) => {
+        setIsDisplay(true);
+        setId(id);
+    }
+
+    const handleConfirmation = () => {
+        deleteNotification();
+        setIsDisplay(false);
+    }
+
+    // Delete notification
+    const deleteNotification = () => {
         const updateData = notifications.filter(notification => notification.id !== id);
         setNotifications(updateData);
 
@@ -40,12 +56,12 @@ const Notification = () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ id: id })
         })
-        .then(res => res.json())
-        .then(data => {
-            if(data){
-                
-            }
-        })
+            .then(res => res.json())
+            .then(data => {
+                if (data) {
+                    setIsToast(true);
+                }
+            })
     }
 
     return (
@@ -59,8 +75,14 @@ const Notification = () => {
                     {
                         notifications?.map(notification => <NotificationList notification={notification} handleDeleteNotification={handleDeleteNotification} key={notification.id} />)
                     }
+
+                    {!isLoading && !notifications.length && <div className="text-red-600 text-center">No notifications found.</div>}
                 </div>
+
+                {isDisplay && <ConfirmationPopUp handleConfirmation={handleConfirmation} setIsDisplay={setIsDisplay} />}
+
             </section>
+            {isToast && <Toast message="Successfully Deleted" setIsToast={setIsToast} />}
         </>
     );
 };

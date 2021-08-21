@@ -12,6 +12,7 @@ const NotificationList = ({ notification, handleDeleteNotification }) => {
     const { id, sender_email, post_id, notification_body, status, sender_photo, date } = notification;
 
     return (
+        <>
         <div className={`py-2 px-2 border-b-2 flex justify-between items-center ${status === 'unseen' ? darkMode ? "bg-green-800" : "bg-green-100" : ""} ${darkMode ? "border-gray-700" : "border-gray-300"}`}>
             <div style={{ width: '93%' }}>
                 <Link to={post_id ? `/post/${post_id}` : `/profile/${sender_email}`}>
@@ -28,6 +29,8 @@ const NotificationList = ({ notification, handleDeleteNotification }) => {
                 <button onClick={(e) => handleDeleteNotification(id)} className={`rounded-full px-2 py-1 ${darkMode ? "hover:bg-gray-700" : "hover:bg-gray-200"}`}><FontAwesomeIcon icon={faTrashAlt} /></button>
             </div>
         </div>
+
+        </>
     );
 };
 
