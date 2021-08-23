@@ -84,7 +84,6 @@ const Home = () => {
             })
     }
 
-
     return (
         <>
             <Header />
@@ -113,7 +112,7 @@ const Home = () => {
                         posts?.map(post => <Main post={post} key={post.post_id}></Main>)
                     }
 
-                    {!isLoading && !posts.length && <div className="text-red-600 text-center">No posts found.</div>}
+                    {/* {!isLoading && !posts.length && <div className="text-red-600 text-center">No posts found.</div>} */}
                 </div>
 
                 {/* Messaging part */}

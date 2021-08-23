@@ -1,13 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react';
 import image from '../../../images/avater.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEllipsisH, faThumbsUp, faCommentAlt, faShare, faTimes } from '@fortawesome/free-solid-svg-icons'
+import { faEllipsisH, faThumbsUp, faCommentAlt, faShare, faTimes, faEdit, faCopy } from '@fortawesome/free-solid-svg-icons'
 import { userContext } from '../../../App';
 import { Link } from 'react-router-dom';
 import Comments from './Comments/Comments';
 import Toast from '../../ConfirmationPopUp/Toast/Toast';
+import { faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 
-const Main = ({ post }) => {
+const Main = ({ post, handleEdit, handleDelete }) => {
     const [loggedInUser] = useContext(userContext);
     const { darkMode } = loggedInUser;
     const [isLike, setIsLike] = useState(false);
@@ -19,6 +20,9 @@ const Main = ({ post }) => {
     const { post_id, author, authorphoto, authoremail, postbody, date, shares } = post;
     const [isOpen, setIsOpen] = useState(false);
     const [isToast, setIsToast] = useState(false);
+    const [isManage, setIsManage] = useState(false);
+
+    const hoverStyle = darkMode ? "hover:bg-gray-600 rounded-md" : "hover:bg-gray-200 rounded-md";
 
     // check is like any post
     useEffect(() => {
@@ -78,7 +82,7 @@ const Main = ({ post }) => {
         const newComment = comment.replaceAll("'", "''");
 
         const commentData = { post_id: id, email: email, receiver_email: authoremail, photo: loggedInUser.photo, name: loggedInUser.name, comment: newComment, date: new Date() };
-        setComments([...comments, { ...commentData, id: comments.length + 1 }]);
+        setComments([{ ...commentData, id: comments.length + 1 }].concat(comments));
         setComment("");
 
         fetch('https://vast-village-server.herokuapp.com/addComment', {
@@ -99,6 +103,7 @@ const Main = ({ post }) => {
         setComment(e.target.value);
     }
 
+
     // Handle share btn
     const handleShare = (id) => {
 
@@ -118,10 +123,29 @@ const Main = ({ post }) => {
                         <small>{new Date(date).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</small>
                     </div>
                 </div>
+
+                {/* Three dots menu */}
                 <div>
-                    <button className={`rounded-full px-2 py-1 ${darkMode ? "hover:bg-gray-700" : "hover:bg-gray-200"}`}>
-                        <FontAwesomeIcon icon={faEllipsisH} />
-                    </button>
+                    <div className="relative inline-block text-left">
+                        <div>
+                            <button onClick={() => setIsManage(!isManage)} className={`rounded-full px-2 py-1 ${darkMode ? "hover:bg-gray-700" : "hover:bg-gray-200"}`}>
+                                <FontAwesomeIcon icon={faEllipsisH} />
+                            </button>
+                        </div>
+
+                        {isManage &&
+                            <div className={`origin-top-right absolute right-0 mt-1 w-36 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none ${darkMode ? "bg-gray-700" : "bg-white"}`} role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+                                {authoremail === loggedInUser.email &&
+                                    <div role="none">
+                                        <button onClick={() => handleEdit(post)} className={`block w-full text-left px-3 py-2 text-sm font-bold ${hoverStyle}`} ><FontAwesomeIcon icon={faEdit} /> Edit</button>
+                                        <button onClick={() => handleDelete(post_id)} className={`block w-full text-left px-3 py-2 text-sm font-bold ${hoverStyle}`}><FontAwesomeIcon icon={faTrashAlt} /> Delete</button>
+                                    </div>}
+                                <div>
+                                    <button onClick={() => setIsManage(false)} className={`block w-full text-left px-3 py-2 text-sm font-bold ${hoverStyle}`}><FontAwesomeIcon icon={faCopy} /> Copy link</button>
+                                </div>
+                            </div>}
+                    </div>
+
                 </div>
             </div>
 

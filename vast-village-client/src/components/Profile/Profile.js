@@ -98,8 +98,6 @@ const Profile = () => {
 
                 {/* Main part */}
                 <div className="px-2 md:w-3/5 mt-3 lg:w-2/5 md:relative top-0 md:left-16 lg:left-48">
-                    {loggedInUser.email === email && <CreatePost />}
-
                     <Switch>
                         {routes.map((route, index) => (
                             // Render more <Route>s with the same paths as
