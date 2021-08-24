@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import image from '../../../images/avater.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEllipsisH, faThumbsUp, faCommentAlt, faShare, faTimes, faEdit, faCopy } from '@fortawesome/free-solid-svg-icons'
@@ -21,6 +21,7 @@ const Main = ({ post, handleEdit, handleDelete }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [isToast, setIsToast] = useState(false);
     const [isManage, setIsManage] = useState(false);
+    const [isDeleteToast, setIsDeleteToast] = useState(false);
 
     const hoverStyle = darkMode ? "hover:bg-gray-600 rounded-md" : "hover:bg-gray-200 rounded-md";
 
@@ -98,6 +99,12 @@ const Main = ({ post, handleEdit, handleDelete }) => {
             })
     }
 
+    // Copy to clipboard
+    const handleCopy = (post_id) => {
+        navigator.clipboard.writeText(`http://vast-village.web.app/post/${post_id}`);
+        setIsManage(false);
+    }
+
     // getting comment
     const handleChange = (e) => {
         setComment(e.target.value);
@@ -141,7 +148,7 @@ const Main = ({ post, handleEdit, handleDelete }) => {
                                         <button onClick={() => handleDelete(post_id)} className={`block w-full text-left px-3 py-2 text-sm font-bold ${hoverStyle}`}><FontAwesomeIcon icon={faTrashAlt} /> Delete</button>
                                     </div>}
                                 <div>
-                                    <button onClick={() => setIsManage(false)} className={`block w-full text-left px-3 py-2 text-sm font-bold ${hoverStyle}`}><FontAwesomeIcon icon={faCopy} /> Copy link</button>
+                                    <button onClick={() => handleCopy(post_id)} className={`block w-full text-left px-3 py-2 text-sm font-bold ${hoverStyle}`}><FontAwesomeIcon icon={faCopy} /> Copy post link</button>
                                 </div>
                             </div>}
                     </div>
@@ -165,7 +172,7 @@ const Main = ({ post, handleEdit, handleDelete }) => {
             {/* Like, comment, share button */}
             <div className={`grid grid-cols-3 mt-2 text-center border-t-2 border-b-2 text-md ${darkMode ? "text-gray-200 border-gray-600" : "text-gray-600 border-gray-300"}`}>
                 <button onClick={() => handleLike(post_id, loggedInUser.email)} className={`${darkMode ? "hover:bg-gray-700" : "hover:bg-gray-200"} p-1 ${isLike && "text-green-600"}`}><FontAwesomeIcon icon={faThumbsUp} /> Like</button>
-                <button className={`${darkMode ? "hover:bg-gray-700" : "hover:bg-gray-200"} p-1`}><FontAwesomeIcon icon={faCommentAlt} /> Comment</button>
+                <button  className={`${darkMode ? "hover:bg-gray-700" : "hover:bg-gray-200"} p-1`}><FontAwesomeIcon icon={faCommentAlt} /> Comment</button>
                 <button onClick={() => handleShare(post_id)} className={`${darkMode ? "hover:bg-gray-700" : "hover:bg-gray-200"} p-1`}><FontAwesomeIcon icon={faShare} /> Share</button>
             </div>
 
@@ -174,15 +181,15 @@ const Main = ({ post, handleEdit, handleDelete }) => {
                 <div className="w-8 mr-2">
                     <img className="rounded-full" src={loggedInUser.photo || image} alt="" />
                 </div>
-                <input onChange={handleChange} autocomplete="off" className={`w-4/5 focus:outline-none rounded-xl px-4 py-2 ${darkMode ? "bg-gray-700" : "bg-gray-200"}`} type="text" name={`comment${post_id}`} id={`comment${post_id}`} value={comment} placeholder="Write a comment" required />
+                <input onChange={handleChange} autoComplete="off" className={`w-4/5 focus:outline-none rounded-xl px-4 py-2 ${darkMode ? "bg-gray-700" : "bg-gray-200"}`} type="text" name={`comment${post_id}`} id={`comment${post_id}`} value={comment} placeholder="Write a comment" required />
                 <button type="submit" className={`${darkMode ? "bg-gray-700" : "bg-gray-200"} p-1 rounded-xl ml-2 px-3 font-bold py-2`}>Add</button>
             </form>
 
-            {/* All comments */}
+            {/* Display All comments*/}
             <div className="mt-2">
                 {
                     isComments &&
-                    comments.map(comment => <Comments cmnt={comment} key={comment.id} />)
+                    comments.map(comment => <Comments cmnt={comment} authoremail={authoremail} setComments={setComments} comments={comments} setIsDeleteToast={setIsDeleteToast} key={comment.id} />)
                 }
             </div>
 
@@ -195,10 +202,10 @@ const Main = ({ post, handleEdit, handleDelete }) => {
                     <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
 
 
-                    <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                        <div className="bg-white px-3 py-3 sm:p-4 sm:pb-4">
-                            <div className="flex justify-between items-center border-b-2 pb-1">
-                                <h2 className="font-bold text-xl text-gray-600">Likes ({likes.length})</h2>
+                    <div className={`inline-block align-bottom rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full ${darkMode ? "bg-gray-800" : "bg-white"}`}>
+                        <div className="px-3 py-3 sm:p-4 sm:pb-4">
+                            <div className={`flex justify-between items-center border-b-2 pb-1 ${darkMode ? "border-gray-700" : ""}`}>
+                                <h2 className="font-bold text-xl">Likes ({likes.length})</h2>
                                 <button onClick={() => setIsOpen(false)} className="text-xl"><FontAwesomeIcon icon={faTimes} /></button>
                             </div>
                             {
@@ -209,7 +216,7 @@ const Main = ({ post, handleEdit, handleDelete }) => {
                                                 <div className="w-10 rounded-full mr-2">
                                                     <img className="rounded-full" src={like.photo} alt="" />
                                                 </div>
-                                                <h3 className="font-bold text-gray-600">{like.name}</h3>
+                                                <h3 className="font-bold">{like.name}</h3>
                                             </div>
                                         </Link>
                                     )
@@ -219,6 +226,7 @@ const Main = ({ post, handleEdit, handleDelete }) => {
                     </div>
                 </div>
             </div>}
+            {isDeleteToast && <Toast message="Comment Deleted" setIsToast={setIsToast} />}
 
             {isToast && <Toast message="Comment Added" setIsToast={setIsToast} />}
         </div>

@@ -3,29 +3,29 @@ import React from 'react';
 const PostSkeleton = () => {
     return (
         <>
-            <div class="shadow rounded-md p-4 w-full mx-auto mt-8">
-                <div class="animate-pulse flex space-x-4">
-                    <div class="rounded-full bg-blue-200 h-12 w-12"></div>
-                    <div class="h-10 bg-blue-200 rounded w-3/4"></div>
+            <div className="shadow rounded-md p-4 w-full mx-auto mt-8">
+                <div className="animate-pulse flex space-x-4">
+                    <div className="rounded-full bg-blue-200 h-12 w-12"></div>
+                    <div className="h-10 bg-blue-200 rounded w-3/4"></div>
                 </div>
-                <div class="flex-1 animate-pulse space-y-4 py-1">
-                    <div class="space-y-2">
-                        <div class="h-40 bg-blue-200 rounded"></div>
+                <div className="flex-1 animate-pulse space-y-4 py-1">
+                    <div className="space-y-2">
+                        <div className="h-40 bg-blue-200 rounded"></div>
                     </div>
-                    <div class="h-8 bg-blue-200 rounded"></div>
+                    <div className="h-8 bg-blue-200 rounded"></div>
                 </div>
             </div>
 
-            <div class="shadow rounded-md p-4 w-full mx-auto mt-8">
-                <div class="animate-pulse flex space-x-4">
-                    <div class="rounded-full bg-blue-200 h-12 w-12"></div>
-                    <div class="h-10 bg-blue-200 rounded w-3/4"></div>
+            <div className="shadow rounded-md p-4 w-full mx-auto mt-8">
+                <div className="animate-pulse flex space-x-4">
+                    <div className="rounded-full bg-blue-200 h-12 w-12"></div>
+                    <div className="h-10 bg-blue-200 rounded w-3/4"></div>
                 </div>
-                <div class="flex-1 animate-pulse space-y-4 py-1">
-                    <div class="space-y-2">
-                        <div class="h-40 bg-blue-200 rounded"></div>
+                <div className="flex-1 animate-pulse space-y-4 py-1">
+                    <div className="space-y-2">
+                        <div className="h-40 bg-blue-200 rounded"></div>
                     </div>
-                    <div class="h-8 bg-blue-200 rounded"></div>
+                    <div className="h-8 bg-blue-200 rounded"></div>
                 </div>
             </div>
         </>

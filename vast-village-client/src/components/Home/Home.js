@@ -95,10 +95,10 @@ const Home = () => {
                     <div className="mt-12 w-full hide-scrollbar">
                         {isLoading && <FriendsSkeleton />}
                         {
-                            requests.map(friend => <FriendsHome friend={friend} request={true} handleConfirmFriend={handleConfirmFriend} handleRemoveRequest={handleRemoveRequest} key={friend.key} />)
+                            requests.map(friend => <FriendsHome friend={friend} request={true} handleConfirmFriend={handleConfirmFriend} handleRemoveRequest={handleRemoveRequest} key={friend.id} />)
                         }
                         {
-                            friends.map(friend => <FriendsHome friend={friend} request={false} key={friend.key} />)
+                            friends.map(friend => <FriendsHome friend={friend} request={false} key={friend.id} />)
                         }
                     </div>
                 </div>

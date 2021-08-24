@@ -26,9 +26,10 @@ const AllPeoples = () => {
     }, [loggedInUser.email])
 
     // handle addFriend btn
-    const handleAddFriend = (email) => {
-        const newUsers = users.filter(user => user.email !== email);
-        setUsers(newUsers);
+    const handleAddFriend = (email, setIsSend) => {
+        // const newUsers = users.filter(user => user.email !== email);
+        // setUsers(newUsers);
+        setIsSend(true);
 
         fetch('https://vast-village-server.herokuapp.com/addFriend', {
             method: 'POST',

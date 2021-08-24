@@ -5,7 +5,7 @@ import image from '../../../images/avater.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
-const EditPost = ({postData, setEditDisplay, setPosts, posts}) => {
+const EditPost = ({ postData, setEditDisplay, setPosts, posts }) => {
     const [loggedInUser] = useContext(userContext);
     const { darkMode } = loggedInUser;
     const [post, setPost] = useState('');
@@ -19,24 +19,24 @@ const EditPost = ({postData, setEditDisplay, setPosts, posts}) => {
         e.preventDefault();
         const newPosts = posts.filter(post => post.post_id !== postData.post_id);
 
-        setPosts([{...postData, postbody: post}].concat(newPosts));
+        setPosts([{ ...postData, postbody: post }].concat(newPosts));
 
         fetch('https://vast-village-server.herokuapp.com/updatePost', {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({postBody: post.replaceAll("'", "''"), post_id: postData.post_id})
+            body: JSON.stringify({ postBody: post.replaceAll("'", "''"), post_id: postData.post_id })
         })
             .then(res => res.json())
             .then(data => {
-                
+
                 console.log(data);
                 if (data) {
                     setIsToast(true);
-                    setEditDisplay(false);
                 }
             })
+        setEditDisplay(false);
     }
 
     return (

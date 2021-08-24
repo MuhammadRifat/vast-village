@@ -6,7 +6,7 @@ import PostSkeleton from '../../components/Loader/PostSkeleton/PostSkeleton';
 
 const IndividualPost = () => {
     const { post_id } = useParams();
-    const [post, setPost] = useState({});
+    const [post, setPost] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
     // Load individual post by post_id from database
@@ -15,11 +15,12 @@ const IndividualPost = () => {
         fetch(`https://vast-village-server.herokuapp.com/post/${post_id}`)
             .then(res => res.json())
             .then(data => {
-                setPost(data[0]);
+                setPost(data);
                 setIsLoading(false);
             })
     }, [post_id])
 
+    console.log(post);
     return (
         <>
             <Header />
@@ -30,7 +31,9 @@ const IndividualPost = () => {
                     {
                         isLoading && <PostSkeleton />
                     }
-                    <Main post={post} />
+                    {!!post.length ? post?.map(pst => <Main post={pst} key={pst.post_id} />)
+                    :
+                    <div className="text-center text-red-600 mt-5">Post maybe deleted</div>}
                 </div>
             </div>
         </>
