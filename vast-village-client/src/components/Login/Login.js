@@ -47,55 +47,78 @@ const Login = () => {
     }
 
     // For using login and signup
+    // const handleSubmit = (event) => {
+    //     if (!newUser && user.email && user.password) {
+    //         setIsLoading(true);
+    //         handleLogIn(user.email, user.password)
+    //             .then(res => {
+    //                 if (res.email) {
+    //                     handleLogInUser(res, true);
+    //                 }
+    //                 else {
+    //                     const newUser = {
+    //                         error: res
+    //                     }
+    //                     setLoggedInUser(newUser);
+    //                     setIsLoading(false);
+    //                 }
+    //             })
+    //     }
+    //     if (newUser && user.email && user.password && user.confirmPassword) {
+    //         setIsLoading(true);
+    //         if (user.password.length === user.confirmPassword.length) {
+    //             handleSignUp(user.name, user.email, user.confirmPassword)
+    //                 .then(res => {
+    //                     if (res.email) {
+    //                         handleLogInUser(res, false);
+    //                         const userDetail = { ...user };
+    //                         userDetail.error = "";
+    //                         setUser(userDetail);
+    //                         setIsLoading(false);
+    //                     }
+    //                     else {
+    //                         const newUser = {
+    //                             error: res
+    //                         }
+    //                         setLoggedInUser(newUser);
+    //                         const userDetail = { ...user };
+    //                         userDetail.error = "";
+    //                         setUser(userDetail);
+    //                         setIsLoading(false);
+    //                     }
+    //                 })
+    //         }
+    //         else {
+    //             const userDetail = { ...user };
+    //             userDetail.error = "Confirm password do not match";
+    //             setUser(userDetail);
+    //             setIsLoading(false);
+    //         }
+    //     }
+    //     event.preventDefault();
+    // }
+
     const handleSubmit = (event) => {
-        if (!newUser && user.email && user.password) {
-            setIsLoading(true);
-            handleLogIn(user.email, user.password)
-                .then(res => {
-                    if (res.email) {
-                        handleLogInUser(res, true);
-                    }
-                    else {
-                        const newUser = {
-                            error: res
-                        }
-                        setLoggedInUser(newUser);
-                        setIsLoading(false);
-                    }
-                })
-        }
-        if (newUser && user.email && user.password && user.confirmPassword) {
-            setIsLoading(true);
-            if (user.password.length === user.confirmPassword.length) {
-                handleSignUp(user.name, user.email, user.confirmPassword)
-                    .then(res => {
-                        if (res.email) {
-                            handleLogInUser(res, false);
-                            const userDetail = { ...user };
-                            userDetail.error = "";
-                            setUser(userDetail);
-                            setIsLoading(false);
-                        }
-                        else {
-                            const newUser = {
-                                error: res
-                            }
-                            setLoggedInUser(newUser);
-                            const userDetail = { ...user };
-                            userDetail.error = "";
-                            setUser(userDetail);
-                            setIsLoading(false);
-                        }
-                    })
-            }
-            else {
-                const userDetail = { ...user };
-                userDetail.error = "Confirm password do not match";
-                setUser(userDetail);
-                setIsLoading(false);
-            }
-        }
         event.preventDefault();
+        setIsLoading(true);
+
+        fetch('https://vast-village-server.herokuapp.com/user', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: user.email })
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data) {
+                    setCookie("email", data.email, 7);
+                    setLoggedInUser({ ...data, darkMode: loggedInUser.darkMode });
+                    history.replace(from);
+                    setIsLoading(false);
+                } else{
+                    setUser({error: "Email Not Found!"})
+                    setIsLoading(false);
+                }
+            })
     }
 
     // For accessing user information from input and validating data
@@ -192,17 +215,17 @@ const Login = () => {
                                     <input type="text" onBlur={handleBlur} name="name" placeholder="Name" disabled required />
                                 }
                                 <br />
-                                <input type="text" onBlur={handleBlur} name="email" placeholder="Email" disabled required />
+                                <input type="text" onBlur={handleBlur} name="email" placeholder="Email" required />
                                 <br />
                                 {
                                     !user.emailValid &&
                                     <span className="text-red-500">Enter a valid email</span>
                                 }
-                                <input type="password" onBlur={handleBlur} name="password" placeholder="Password" disabled required /><br />
-                                {
+                                {/* <input type="password" onBlur={handleBlur} name="password" placeholder="Password" disabled required /><br /> */}
+                                {/* {
                                     !user.passwordValid &&
                                     <span className="text-red-500">Enter a valid password (at least 8 character and number)</span>
-                                }
+                                } */}
                                 {
                                     newUser && <input type="password" onBlur={handleBlur} name="confirmPassword" placeholder="Confirm password" disabled required />
                                 }
@@ -212,9 +235,9 @@ const Login = () => {
                             <h6 className="mt-3 text-center">
                                 {
                                     newUser ?
-                                        <span>Already have an account?<button className="create-btn focus:outline-none" onClick={() => handleLogInOrCreate()}>Login</button></span>
+                                        <span>Already have an account?<button disabled className="create-btn focus:outline-none" onClick={() => handleLogInOrCreate()}>Login</button></span>
                                         :
-                                        <span>Don't have an account? <button className="create-btn focus:outline-none" onClick={() => handleLogInOrCreate()}>Create an account</button></span>
+                                        <span>Don't have an account? <button disabled className="create-btn focus:outline-none" onClick={() => handleLogInOrCreate()}>Create an account</button></span>
                                 }
                             </h6>
                         </div>
