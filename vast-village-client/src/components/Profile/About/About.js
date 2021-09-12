@@ -200,7 +200,7 @@ const About = ({ email }) => {
             {/* About you */}
             <div className={`p-2 mx-1 my-4 rounded-md shadow-md ${darkMode ? "bg-gray-800 text-white" : "bg-white"}`}>
                 <div className="flex justify-between">
-                    <h3 className="text-lg font-bold">About you</h3>
+                    <h3 className="text-lg font-bold">About</h3>
                     {email === loggedInUser.email && <button onClick={() => setIsDisplay({ ...isDisplay, about: false })} className="text-blue-500 hover:underline"><FontAwesomeIcon icon={faEdit} /> Edit</button>}
                 </div>
 
